@@ -1,12 +1,13 @@
 import sqlite3
 
-from user import User
+from classes import User, Task
 
 
 def create_db(name: str) -> None:
     connection = sqlite3.connect(f'{name}.db')
     cursor = connection.cursor()
 
+    # user table
     cursor.execute('''
         CREATE TABLE IF NOT EXISTS users (
             user_id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -16,6 +17,7 @@ def create_db(name: str) -> None:
         )
     ''')
 
+    # task table
     cursor.execute('''
         CREATE TABLE IF NOT EXISTS tasks (
             task_id INTEGER PRIMARY KEY  AUTOINCREMENT,
@@ -49,3 +51,51 @@ def get_user_data_from_db(name: str, username: str) -> User:
     user = User(user_id, user_username, user_email, user_password)
 
     return user
+
+
+def get_list_of_tasks(name: str, username: str) -> list[Task]:
+    connection = sqlite3.connect(f'{name}.db')
+    cursor = connection.cursor()
+
+    # getting the user id
+    cursor.execute('SELECT user_id FROM users WHERE username = ?', (username,))
+    user_id = cursor.fetchone()[0]
+
+    # getting the tasks of the required user
+    cursor.execute('SELECT * FROM tasks WHERE user_id = ?', (user_id,))
+    list_of_tasks = list(map(lambda x: Task(*x), cursor.fetchall()))
+
+    connection.close()
+
+    return list_of_tasks
+
+# TODO VALIDATION
+
+
+def add_user_to_db(name: str, username: str, email: str, password: str) -> None:
+    connection = sqlite3.connect(f'{name}.db')
+    cursor = connection.cursor()
+
+    cursor.execute('INSERT INTO users (username, email, password) VALUES (?, ?, ?)',
+                   (username, email, password))
+
+    connection.commit()
+    connection.close()
+
+
+def delete_user(name: str, username: str) -> None:
+    connection = sqlite3.connect(name)
+    cursor = connection.cursor()
+
+    # getting user id
+    cursor.execute('SELECT user_id FROM users WHERE username = ?', (username,))
+    user_id = cursor.fetchone()[0]
+
+    # deleting user's tasks
+    cursor.execute('DELETE FROM tasks WHERE user_id = ?', (user_id,))
+
+    # deleting user
+    cursor.execute('DELETE FROM users WHERE user_id = ?', (user_id,))
+
+    connection.commit()
+    connection.close()
