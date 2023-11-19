@@ -83,8 +83,8 @@ def add_user_to_db(name: str, username: str, email: str, password: str) -> None:
     connection.close()
 
 
-def delete_user(name: str, username: str) -> None:
-    connection = sqlite3.connect(name)
+def delete_user_from_db(name: str, username: str) -> None:
+    connection = sqlite3.connect(f'{name}.db')
     cursor = connection.cursor()
 
     # getting user id
@@ -96,6 +96,16 @@ def delete_user(name: str, username: str) -> None:
 
     # deleting user
     cursor.execute('DELETE FROM users WHERE user_id = ?', (user_id,))
+
+    connection.commit()
+    connection.close()
+
+
+def delete_task_from_db(name: str, task_id: int) -> None:
+    connection = sqlite3.connect(f'{name}.db')
+    cursor = connection.cursor()
+
+    cursor.execute('DELETE FROM tasks WHERE task_id = ?', (task_id,))
 
     connection.commit()
     connection.close()
