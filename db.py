@@ -1,9 +1,18 @@
 import sqlite3
+from typing import Optional
 
 from classes import User, Task
 
 
-# TODO VALIDATION
+def clear_db(name: str):
+    connection = sqlite3.connect(f'{name}.db')
+    cursor = connection.cursor()
+
+    cursor.execute('DELETE FROM tasks')
+    cursor.execute('DELETE FROM users')
+
+    connection.commit()
+    connection.close()
 
 
 def create_db(name: str) -> None:
@@ -50,14 +59,17 @@ def get_list_of_users(name: str) -> list[User]:
     return list_of_users
 
 
-def get_user_data_from_db(name: str, username: str) -> User:
+def get_user_data_from_db(name: str, username: str) -> User | None:
     connection = sqlite3.connect(f'{name}.db')
     cursor = connection.cursor()
 
     cursor.execute('SELECT * FROM users WHERE username = ?', (username,))
-    user_tuple: tuple[int, str, str, str] = cursor.fetchone()
+    user_tuple: Optional[tuple[int, str, str, str]] = cursor.fetchone()
 
     connection.close()
+
+    if user_tuple is None:
+        return None
 
     user_id = user_tuple[0]
     user_username = user_tuple[1]
@@ -69,13 +81,19 @@ def get_user_data_from_db(name: str, username: str) -> User:
     return user
 
 
-def get_list_of_tasks(name: str, username: str) -> list[Task]:
+def get_list_of_tasks(name: str, username: str) -> list[Task] | None:
     connection = sqlite3.connect(f'{name}.db')
     cursor = connection.cursor()
 
     # getting the user id
     cursor.execute('SELECT user_id FROM users WHERE username = ?', (username,))
-    user_id = cursor.fetchone()[0]
+    user_record = cursor.fetchone()
+
+    if user_record is None:
+        connection.close()
+        return None
+
+    user_id = user_record[0]
 
     # getting the tasks of the required user
     cursor.execute('SELECT * FROM tasks WHERE user_id = ?', (user_id,))
@@ -86,19 +104,28 @@ def get_list_of_tasks(name: str, username: str) -> list[Task]:
     return list_of_tasks
 
 
-def get_task_by_id_from_db(name: str, username: str, task_id: int) -> Task:
+def get_task_by_id_from_db(name: str, username: str, task_id: int) -> Task | None:
     connection = sqlite3.connect(f'{name}.db')
     cursor = connection.cursor()
 
     # getting user id
     cursor.execute('SELECT user_id FROM users WHERE username = ?', (username,))
-    user_id = cursor.fetchone()[0]
+    user_record = cursor.fetchone()
+
+    if user_record is None:
+        connection.close()
+        return None
+
+    user_id = user_record[0]
 
     cursor.execute('SELECT * FROM tasks WHERE task_id = ? AND user_id = ?', (task_id, user_id))
 
-    task_tuple: tuple[int, int, str, str, str, str, str] = cursor.fetchone()
+    task_tuple: Optional[tuple[int, int, str, str, str, str, str]] = cursor.fetchone()
 
     connection.close()
+
+    if task_tuple is None:
+        return None
 
     task_id = task_tuple[0]
     user_id = task_tuple[1]
@@ -115,6 +142,21 @@ def get_task_by_id_from_db(name: str, username: str, task_id: int) -> Task:
     return task
 
 
+def is_unique_user(name: str, username: str) -> bool:
+    connection = sqlite3.connect(f'{name}.db')
+    cursor = connection.cursor()
+
+    cursor.execute('SELECT * FROM users WHERE username = ?', (username,))
+    user_record = cursor.fetchone()
+
+    connection.close()
+
+    if user_record is None:
+        return True
+    else:
+        return False
+
+
 def add_user_to_db(name: str, username: str, email: str, password: str) -> None:
     connection = sqlite3.connect(f'{name}.db')
     cursor = connection.cursor()
@@ -127,13 +169,19 @@ def add_user_to_db(name: str, username: str, email: str, password: str) -> None:
 
 
 def add_task_to_db(name: str, username: str, task_name: str,
-                   task_description: str, task_date: str, task_time: str) -> None:
+                   task_description: str, task_date: str, task_time: str) -> bool:
     connection = sqlite3.connect(f'{name}.db')
     cursor = connection.cursor()
 
     # getting user id
     cursor.execute('SELECT user_id FROM users WHERE username = ?', (username,))
-    user_id = cursor.fetchone()[0]
+    user_record = cursor.fetchone()
+
+    if user_record is None:
+        connection.close()
+        return True
+
+    user_id = user_record[0]
 
     cursor.execute('''INSERT INTO tasks
                     (user_id, task_name, task_description, task_date, task_time)
@@ -143,14 +191,22 @@ def add_task_to_db(name: str, username: str, task_name: str,
     connection.commit()
     connection.close()
 
+    return False
 
-def delete_user_from_db(name: str, username: str) -> None:
+
+def delete_user_from_db(name: str, username: str) -> bool:
     connection = sqlite3.connect(f'{name}.db')
     cursor = connection.cursor()
 
     # getting user id
     cursor.execute('SELECT user_id FROM users WHERE username = ?', (username,))
-    user_id = cursor.fetchone()[0]
+    user_record = cursor.fetchone()
+
+    if user_record is None:
+        connection.close()
+        return True
+
+    user_id = user_record[0]
 
     # deleting user's tasks
     cursor.execute('DELETE FROM tasks WHERE user_id = ?', (user_id,))
@@ -161,16 +217,56 @@ def delete_user_from_db(name: str, username: str) -> None:
     connection.commit()
     connection.close()
 
+    return False
 
-def delete_task_from_db(name: str, username: str, task_id: int) -> None:
+
+def delete_task_from_db(name: str, username: str, task_id: int) -> bool:
     connection = sqlite3.connect(f'{name}.db')
     cursor = connection.cursor()
 
     # getting user id
     cursor.execute('SELECT user_id FROM users WHERE username = ?', (username,))
-    user_id = cursor.fetchone()[0]
+    user_record = cursor.fetchone()
+
+    if user_record is None:
+        connection.close()
+        return True
+
+    user_id = user_record[0]
+
+    # checking if task exists
+    cursor.execute('SELECT * FROM tasks WHERE task_id = ?', (task_id,))
+    task = cursor.fetchone()
+
+    if task is None:
+        connection.close()
+        return True
 
     cursor.execute('DELETE FROM tasks WHERE task_id = ? AND user_id = ?', (task_id, user_id))
 
     connection.commit()
     connection.close()
+
+    return False
+
+
+def delete_user_tasks_from_db(name: str, username: str) -> bool:
+    connection = sqlite3.connect(f'{name}.db')
+    cursor = connection.cursor()
+
+    # getting user id
+    cursor.execute('SELECT user_id FROM users WHERE username = ?', (username,))
+    user_record = cursor.fetchone()
+
+    if user_record is None:
+        connection.close()
+        return True
+
+    user_id = user_record[0]
+
+    cursor.execute('DELETE FROM tasks WHERE user_id = ?', (user_id,))
+
+    connection.commit()
+    connection.close()
+
+    return False
