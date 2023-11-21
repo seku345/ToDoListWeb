@@ -2,7 +2,11 @@ from flask import Flask, jsonify, request
 from flask_cors import CORS
 from werkzeug.exceptions import NotFound, Conflict
 
-from db import *
+from db.db import *
+from db.requests.get import *
+from db.requests.post import *
+from db.requests.put import *
+from db.requests.delete import *
 
 
 app = Flask(__name__)
@@ -74,6 +78,27 @@ def add_task(username: str):
     if add_task_to_db(DB_NAME, username, task_name, task_description, task_date, task_time):
         raise NotFound
     return jsonify({'message': 'Task added successfully!'})
+
+
+@app.route('/api/<string:username>', methods=['PUT'])
+def edit_user_info(username: str):
+    new_username = request.form['new_username']
+    new_email = request.form['new_email']
+    new_password = request.form['new_password']
+    if edit_user_info_in_db(DB_NAME, username, new_username, new_email, new_password):
+        raise NotFound
+    return jsonify({'message': 'User info edited successfully!'})
+
+
+@app.route('/api/<string:username>/tasks/<int:task_id>', methods=['PUT'])
+def edit_task(username: str, task_id: int):
+    new_name = request.form['new_name']
+    new_description = request.form['new_description']
+    new_date = request.form['new_date']
+    new_time = request.form['new_time']
+    if edit_task_in_db(DB_NAME, username, task_id, new_name, new_description, new_date, new_time):
+        raise NotFound
+    return jsonify({'message': 'Task edited successfully!'})
 
 
 @app.route('/api/<string:username>', methods=['DELETE'])
