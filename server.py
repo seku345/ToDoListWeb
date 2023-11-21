@@ -58,6 +58,14 @@ def get_task_by_id(username: str, task_id: int):
     return jsonify(task_data.to_dict())
 
 
+@app.route('/api/<string:username>/tasks/<int:task_id>/status', methods=['GET'])
+def get_task_status(username: str, task_id: int):
+    task_status = get_task_status_from_db(DB_NAME, username, task_id)
+    if task_status is None:
+        raise NotFound
+    return jsonify({'result': task_status})
+
+
 @app.route('/api/registration', methods=['POST'])
 def add_user():
     username = request.form['username']
@@ -99,6 +107,13 @@ def edit_task(username: str, task_id: int):
     if edit_task_in_db(DB_NAME, username, task_id, new_name, new_description, new_date, new_time):
         raise NotFound
     return jsonify({'message': 'Task edited successfully!'})
+
+
+@app.route('/api/<string:username>/tasks/<int:task_id>/status', methods=['PUT'])
+def switch_task_status(username: str, task_id: int):
+    if switch_task_status_in_db(DB_NAME, username, task_id):
+        raise NotFound
+    return jsonify({'message': 'Status changed successfully!'})
 
 
 @app.route('/api/<string:username>', methods=['DELETE'])

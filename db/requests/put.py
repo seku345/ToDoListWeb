@@ -58,3 +58,44 @@ def edit_task_in_db(name: str, username: str, task_id: int, new_name: str, new_d
     connection.close()
 
     return False
+
+
+def switch_task_status_in_db(name: str, username: str, task_id: int) -> bool:
+    connection = sqlite3.connect(f'{name}.db')
+    cursor = connection.cursor()
+
+    # getting user id
+    cursor.execute('SELECT user_id FROM users WHERE username = ?', (username,))
+    user_record = cursor.fetchone()
+
+    if user_record is None:
+        connection.close()
+        return True
+
+    user_id = user_record[0]
+
+    # checking if task exists
+    cursor.execute('SELECT task_status FROM tasks WHERE task_id = ? AND user_id = ?', (task_id, user_id))
+    status_record = cursor.fetchone()
+
+    if status_record is None:
+        connection.close()
+        return True
+
+    status = status_record[0]
+    if status == '✘':
+        new_status = '✔'
+    elif status == '✔':
+        new_status = '✘'
+    else:
+        connection.close()
+        return True
+
+    cursor.execute('''UPDATE tasks SET task_status = ?
+                      WHERE task_id = ? AND user_id = ?''',
+                   (new_status, task_id, user_id))
+
+    connection.commit()
+    connection.close()
+
+    return False

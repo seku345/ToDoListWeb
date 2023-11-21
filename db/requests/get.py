@@ -4,7 +4,7 @@ from typing import Optional
 from classes import User, Task
 
 
-def get_list_of_users(name: str) -> list[User]:
+def get_list_of_users(name: str) -> list[User] | None:
     connection = sqlite3.connect(f'{name}.db')
     cursor = connection.cursor()
 
@@ -98,3 +98,37 @@ def get_task_by_id_from_db(name: str, username: str, task_id: int) -> Task | Non
                 task_time, task_status)
 
     return task
+
+
+def get_task_status_from_db(name: str, username: str, task_id: int) -> bool | None:
+    connection = sqlite3.connect(f'{name}.db')
+    cursor = connection.cursor()
+
+    # getting user id
+    cursor.execute('SELECT user_id FROM users WHERE username = ?', (username,))
+    user_record = cursor.fetchone()
+
+    if user_record is None:
+        connection.close()
+        return None
+
+    user_id = user_record[0]
+
+    cursor.execute('''SELECT task_status FROM tasks
+                      WHERE task_id = ? AND user_id = ?''',
+                   (task_id, user_id))
+
+    status_record = cursor.fetchone()
+
+    if status_record is None:
+        connection.close()
+        return None
+
+    status = status_record[0]
+
+    if status == '✔':
+        return True
+    if status == '✘':
+        return False
+
+    return None
