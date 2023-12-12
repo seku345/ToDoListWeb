@@ -1,0 +1,224 @@
+@import url("https://fonts.googleapis.com/css2?family=Oswald&display=swap");
+
+* {
+    font-family: 'Oswald', sans-serif;
+    margin: auto;
+    /*padding: 0;*/
+}
+.hidden {
+    display: none;
+}
+.header {
+    display: flex;
+    /*align-items: end;*/
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: nowrap;
+    width: 100%;
+    height: 95px;
+    flex-shrink: 0;
+    background: #43B0F1;
+    margin: 0;
+    padding: 0;
+}
+.logo {
+    width: calc(100% / 3);
+    margin: 0;
+    /*padding: 0;*/
+    text-align: left;
+    box-sizing: border-box;
+    /*align-self: start;*/
+    /*flex-grow: 1;*/
+    padding-left: 20px;
+    vertical-align: center;
+    /*text-align: left;*/
+    /*display: block;*/
+    /*flex: 0;*/
+    /*margin-left: 15px;*/
+    /*display: flex;*/
+    /*align-items: center;*/
+}
+.logo-img {
+    /*margin-left: 20px;*/
+    /*padding-left: 15px;*/
+    height: 80px;
+    width: 80px;
+    /*position: relative;*/
+    /*left: 0%;*/
+}
+.app-title {
+    width: calc(100% / 3);
+    box-sizing: border-box;
+    margin: 0;
+    /*flex-grow: 1;*/
+    display: block;
+    text-align: center;
+    vertical-align: center;
+}
+.title-text {
+    color: #FFF;
+    text-align: center;
+    font-size: 64px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+}
+.header-buttons {
+    width: calc(100% / 3);
+    box-sizing: border-box;
+    margin: 0;
+    text-align: right;
+    vertical-align: center;
+    padding-right: 10%;
+    /*flex-grow: 2;*/
+    /*display: flex;*/
+    /*align-items: center;*/
+}
+.sign-up-button {
+    background: #FFF;
+    border: 1px solid #1E3D58;
+    border-radius: 20px 0 0 20px;
+    flex-shrink: 0;
+    width: 100px;
+    height: 45px;
+    color: #057DCD;
+    font-size: 32px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 40px;
+    text-align: center;
+    margin-right: -2px;
+}
+.sign-up-button:hover {
+    background: #E8EEF1;
+    /*color:;*/
+}
+.login-button {
+    background: #3076A4;
+    border: 1px solid #1E3D58;
+    border-radius: 0 20px 20px 0;
+    flex-shrink: 0;
+    width: 100px;
+    height: 45px;
+    color: #FFFFFF;
+    font-size: 32px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 40px;
+    text-align: center;
+    margin-left: -2px;
+    margin-right: -95px;
+}
+.login-button:hover {
+    background: #395f83;
+}
+.background-container {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    z-index: -9999;
+    text-align: center;
+    opacity: 0.5;
+}
+.background {
+    top: 0;
+    left: 0;
+    width: 55%;
+    height: 90%;
+}
+.main-text {
+    display: flex;
+    width: 446px;
+    height: 316px;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+.first-slogan {
+    color: #057DCD;
+    text-align: center;
+    font-size: 24px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+}
+.main-description {
+    color: #43B0F1;
+    text-align: center;
+    font-size: 20px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+}
+.second-slogan {
+    color: #057DCD;
+    text-align: center;
+    font-size: 22px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+}
+.invite-message {
+    color: #057DCD;
+    text-align: center;
+    font-size: 36px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+}
+.footer {
+    width: 100%;
+    height: 100px;
+    flex-shrink: 0;
+    background: #43B0F1;
+    position: absolute;
+    bottom: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+}
+.contacts-title {
+    text-align: center;
+    font-size: 28px;
+    color: #FFFFFF;
+}
+.links {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+}
+.email,
+.telegram,
+.twitter {
+    padding: 10px;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}
+.link-logo {
+    width: 40px;
+    height: auto;
+    /*display: block;*/
+    margin-right: -15px;
+}
+.email-text,
+.telegram-text,
+.twitter-text {
+    margin-left: 30px;
+    color: #FFFFFF;
+    font-size: 20px;
+}
+.email-link,
+.telegram-link,
+.twitter_link {
+    color: #FFFFFF;
+    text-decoration: none;
+}
