@@ -5,50 +5,80 @@
     <title>ToDoList App</title>
     <link rel="stylesheet" href="style.css">
 </head>
-
 <body>
     <div class="background-container">
-        <nav></nav>
         <img class="background" src="sources/paper_sheets.png" alt="Background">
     </div>
     <header class="header">
         <div class="logo">
-            <img class="logo-img" src="sources/logo.png" alt="Logo">
+            <img class="logo-img" src="sources/logo.png" alt="Logo" onclick="to_start_window()">
         </div>
         <div class="app-title">
             <p class="title-text">ToDoList</p>
         </div>
         <div class="header-buttons">
-            <button class="sign-up-button">Sign up</button>
-            <button class="login-button">Login</button>
+            <button class="sign-up-button" onclick="from_login_form(); to_registration_form()">Sign up</button>
+            <button class="login-button" onclick="from_registration_form(); to_login_form()">Login</button>
         </div>
     </header>
     <main class="main">
-        <div class="main-text">
+        <div class="main-text" id="main-text">
             <p class="first-slogan">Emblem of Productivity</p>
             <p class="main-description">Your new starting point in time management and goal achievement! Our application is an intelligent companion designed to turn your ideas into actions. From creating task lists to managing priorities, we offer tools that will help you not only manage time but also enhance your productivity.</p>
             <p class="second-slogan">Your Tasks, Your Way</p>
             <p class="invite-message">Join us and achieve more!</p>
         </div>
+        <div class="login-form-container" id="login-form-container">
+            <div class="form-background">
+                <form class="form">
+                    <div class="input-container">
+                        <label for="username_l"></label>
+                        <input class="input" type="text" id="username_l" name="username-input" placeholder="Username" required>
+                    </div>
+                    <div class="input-container">
+                        <label for="password_l"></label>
+                        <input class="input" type="password" id="password_l" name="password-input" placeholder="Password" required>
+                    </div>
+                    <button class="submit-button" type="submit">Login</button>
+                </form>
+            </div>
+        </div>
+        <div class="registration-form-container" id="registration-form-container">
+            <div class="form-background">
+                <form class="form">
+                    <div class="input-container">
+                        <label for="username_r"></label>
+                        <input class="input" type="text" id="username_r" name="username-input" placeholder="Username" required>
+                    </div>
+                    <div class="input-container">
+                        <label for="password_r"></label>
+                        <input class="input" type="password" id="password_r" name="password-input" placeholder="Password" required>
+                    </div>
+                    <div class="input-container">
+                        <label for="email_r"></label>
+                        <input class="input" type="email" id="email_r" name="email-input" placeholder="Email" required>
+                    </div>
+                    <button class="submit-button" type="submit">Sign up</button>
+                </form>
+            </div>
+        </div>
     </main>
     <footer class="footer">
-        <footer class="footer">
-    <div class="contacts-title">Contact me</div>
-    <div class="links">
-        <div class="email">
-            <img class="link-logo" src="sources/mail_icon.png" alt="Email">
-            <p class="email-text"><a class="email-link" href="mailto:seku345@yan    dex.ru" target="_blank">seku345@yandex.ru</a></p>
+        <div class="contacts-title">Contact me</div>
+        <div class="links">
+            <div class="email">
+                <img class="link-logo" src="sources/mail_icon.png" alt="Email">
+                <p class="email-text"><a class="email-link" href="mailto:seku345@yandex.ru" target="_blank">seku345@yandex.ru</a></p>
+            </div>
+            <div class="telegram">
+                <img class="link-logo" src="sources/telegram_icon.png" alt="Telegram">
+                <p class="telegram-text"><a class="telegram-link" href="https://t.me/seku345" target="_blank">https://t.me/seku345</a></p>
+            </div>
+            <div class="twitter">
+                <img class="link-logo" src="sources/twitter_icon.png" alt="Twitter">
+                <p class="twitter-text"><a class="twitter-link" href="https://twitter.com/sekuosly" target="_blank">https://twitter.com/sekuosly</a></p>
+            </div>
         </div>
-        <div class="telegram">
-            <img class="link-logo" src="sources/telegram_icon.png" alt="Telegram">
-            <p class="telegram-text"><a class="telegram-link" href="https://t.me/seku345" target="_blank">https://t.me/seku345</a></p>
-        </div>
-        <div class="twitter">
-            <img class="link-logo" src="sources/twitter_icon.png" alt="Twitter">
-            <p class="twitter-text"><a class="twitter_link" href="https://twitter.com/sekuosly" target="_blank">https://twitter.com/sekuosly</a></p>
-        </div>
-    </div>
-</footer>
     </footer>
     <script src="script.js"></script>
 </body>
