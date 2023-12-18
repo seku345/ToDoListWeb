@@ -66,6 +66,18 @@ def get_task_status(username: str, task_id: int):
     return jsonify({'result': task_status})
 
 
+@app.route('/api/login', methods=['POST'])
+def login():
+    data = request.get_json()
+    username = data.get('username')
+    password = data.get('password')
+    print(username, password)
+    if are_username_and_password_correct(DB_NAME, username, password):
+        return jsonify({'message': 'User exists'})
+    else:
+        raise NotFound
+
+
 @app.route('/api/registration', methods=['POST'])
 def add_user():
     username = request.form['username']

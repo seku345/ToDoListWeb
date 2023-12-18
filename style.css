@@ -27,6 +27,7 @@
     box-sizing: border-box;
     padding-left: 20px;
     vertical-align: center;
+    cursor: default;
 }
 .logo-img {
     height: 80px;
@@ -47,6 +48,7 @@
     font-style: normal;
     font-weight: 400;
     line-height: normal;
+    pointer-events: none;
 }
 .header-buttons {
     width: calc(100% / 3);
@@ -55,6 +57,7 @@
     text-align: right;
     vertical-align: center;
     padding-right: 10%;
+    cursor: default;
 }
 .sign-up-button {
     background: #FFF;
@@ -93,6 +96,33 @@
 .login-button:hover {
     background: #395f83;
 }
+.sign-out-container {
+    cursor: default;
+    width: calc(100% / 3);
+    box-sizing: border-box;
+    /*margin: 0;*/
+    /*margin-right: 0;*/
+    /*text-align: center;*/
+    /*vertical-align: center;*/
+    text-align: right;
+    padding-right: 3%;
+}
+.sign-out {
+    text-align: right;
+    padding-right: 3%;
+}
+.sign-out-container p {
+    display: inline;
+    color: #FFF;
+    /*text-align: right;*/
+    font-size: 26px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+}
+.sign-out-container p:hover {
+    color: #395f83;
+}
 .background-container {
     position: absolute;
     width: 100%;
@@ -109,8 +139,6 @@
     pointer-events: none;
 }
 .main {
-    /*position: sticky;*/
-    /*text-align: center;*/
     margin: 0;
     display: flex;
     justify-content: center;
@@ -176,6 +204,7 @@
     text-align: center;
     font-size: 28px;
     color: #FFFFFF;
+    pointer-events: none;
 }
 .links {
     width: 100%;
@@ -220,20 +249,16 @@
     height: 70vh;
     margin: 0;
     z-index: 10;
-    /*background-color: #057DCD;*/
 }
 .form-background {
     background-color: #3d84b6;
-    /*opacity: 0.7;*/
     border-radius: 40px;
     padding: 20px 40px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
-    /*height: 20vh;*/
 }
 .input-container {
     width: 300px;
     background-color: #43B0F1;
-    /*opacity: 0.5;*/
     border-radius: 20px;
     padding: 20px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
@@ -244,24 +269,7 @@
     flex-direction: column;
     align-items: center;
     margin: 0;
-    /*background-color: #CCCCCC;*/
-    /*!*opacity: 0.7;*!*/
-    /*border-radius: 40px;*/
-    /*padding-left: 40px;*/
-    /*padding-right: 40px;*/
-    /*!*padding-top: 20px;*!*/
-    /*!*padding-bottom: 20px;*!*/
-    /*height: 20vh;*/
 }
-/*.login-form h2 {*/
-/*    color: #057DCD;*/
-/*    text-align: center;*/
-/*    font-size: 24px;*/
-/*    font-style: normal;*/
-/*    font-weight: 400;*/
-/*    line-height: normal;*/
-/*    margin: 0;*/
-/*}*/
 .input-container {
     width: 100%;
     margin-bottom: 15px;
@@ -276,10 +284,8 @@
     margin: 0;
 }
 .submit-button {
-    /*box-sizing: border-box;*/
     width: calc(100% - 20px);
     padding: 10px;
-    /*padding-top: 10px;*/
     border: none;
     border-radius: 15px;
     background-color: #395f83;
@@ -288,8 +294,59 @@
     cursor: pointer;
     outline: none;
     margin: 0;
-    /*margin-top: 20px;*/
 }
 .submit-button:hover {
     background-color: #1E3D58;
+}
+.error-message {
+    position: absolute;
+    top: 50px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 250px;
+    text-align: center;
+    font-size: 24px;
+    background-color: #FF7F7F;
+    color: #FFFFFF;
+    padding: 5px 10px;
+    border-radius: 15px;
+    z-index: 999;
+    opacity: 0;
+    transition: opacity 0.3s, visibility 0.3s linear;
+    visibility: hidden;
+}
+.error-message.active {
+    visibility: visible;
+    opacity: 1;
+}
+.user-info-container {
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    flex-direction: column;
+    position: relative;
+    background-color: #43B0F1;
+    border-radius: 25px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+    top: 20px;
+    right: 25px;
+    padding: 5px 0;
+    margin: 0 0 0 auto;
+}
+.user-info-container div {
+    box-sizing: border-box;
+    text-align: left;
+    margin-left: 0;
+    margin-top: -7px;
+    margin-bottom: -7px;
+}
+.user-info-container p {
+    margin-left: 0;
+    color: #FFFFFF;
+    font-size: 20px;
+    text-align: center;
+    font-style: normal;
+    font-weight: 400;
+    padding: 10px 20px;
 }

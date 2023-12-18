@@ -16,12 +16,31 @@
         <div class="app-title">
             <p class="title-text">ToDoList</p>
         </div>
-        <div class="header-buttons">
+        <div class="header-buttons" id="header-buttons">
             <button class="sign-up-button" onclick="from_login_form(); to_registration_form()">Sign up</button>
             <button class="login-button" onclick="from_registration_form(); to_login_form()">Login</button>
         </div>
+        <div class="sign-out-container" id="sign-out-container">
+<!--            <div class="sign-out">-->
+                <p id="sign-out" onclick="sign_out()">Sign out</p>
+<!--            </div>-->
+        </div>
     </header>
     <main class="main">
+        <div class="user-info-container" id="user-info">
+            <div>
+                <p>Your Profile</p>
+            </div>
+            <div>
+                <p>Username: <span id="username_place"></span></p>
+            </div>
+            <div>
+                <p>Password: <span id="password_place"></span></p>
+            </div>
+            <div>
+                <p>Email: <span id="email_place"></span></p>
+            </div>
+        </div>
         <div class="main-text" id="main-text">
             <p class="first-slogan">Emblem of Productivity</p>
             <p class="main-description">Your new starting point in time management and goal achievement! Our application is an intelligent companion designed to turn your ideas into actions. From creating task lists to managing priorities, we offer tools that will help you not only manage time but also enhance your productivity.</p>
@@ -30,33 +49,36 @@
         </div>
         <div class="login-form-container" id="login-form-container">
             <div class="form-background">
-                <form class="form">
+                <form class="form" id="l_form">
                     <div class="input-container">
                         <label for="username_l"></label>
-                        <input class="input" type="text" id="username_l" name="username-input" placeholder="Username" required>
+                        <input class="input" type="text" id="username_l" name="username-input-l" placeholder="Username" required>
                     </div>
                     <div class="input-container">
                         <label for="password_l"></label>
-                        <input class="input" type="password" id="password_l" name="password-input" placeholder="Password" required>
+                        <input class="input" type="password" id="password_l" name="password-input-l" placeholder="Password" required>
                     </div>
-                    <button class="submit-button" type="submit">Login</button>
+                    <button class="submit-button" type="submit" id="login_button">Login</button>
                 </form>
             </div>
+            <div class="error-message" id="error-message-login"></div>
+            <div class="error-message" id="error-password"></div>
+            <div class="error-message" id="error-username"></div>
         </div>
         <div class="registration-form-container" id="registration-form-container">
             <div class="form-background">
-                <form class="form">
+                <form class="form" id="r_form">
                     <div class="input-container">
                         <label for="username_r"></label>
-                        <input class="input" type="text" id="username_r" name="username-input" placeholder="Username" required>
+                        <input class="input" type="text" id="username_r" name="username-input-r" placeholder="Username" required>
                     </div>
                     <div class="input-container">
                         <label for="password_r"></label>
-                        <input class="input" type="password" id="password_r" name="password-input" placeholder="Password" required>
+                        <input class="input" type="password" id="password_r" name="password-input-r" placeholder="Password" required>
                     </div>
                     <div class="input-container">
                         <label for="email_r"></label>
-                        <input class="input" type="email" id="email_r" name="email-input" placeholder="Email" required>
+                        <input class="input" type="email" id="email_r" name="email-input-r" placeholder="Email" required>
                     </div>
                     <button class="submit-button" type="submit">Sign up</button>
                 </form>

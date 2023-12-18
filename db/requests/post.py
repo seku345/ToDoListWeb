@@ -1,6 +1,19 @@
 import sqlite3
 
 
+def are_username_and_password_correct(name: str, username: str, password: str) -> bool:
+    connection = sqlite3.connect(f'{name}.db')
+    cursor = connection.cursor()
+
+    cursor.execute('SELECT * FROM users WHERE username = ? AND password = ?',
+                   (username, password))
+
+    user_record = cursor.fetchone()
+    if user_record is None:
+        return False
+    return True
+
+
 def add_user_to_db(name: str, username: str, email: str, password: str) -> None:
     connection = sqlite3.connect(f'{name}.db')
     cursor = connection.cursor()
