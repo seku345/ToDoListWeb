@@ -21,9 +21,7 @@
             <button class="login-button" onclick="from_registration_form(); to_login_form()">Login</button>
         </div>
         <div class="sign-out-container" id="sign-out-container">
-<!--            <div class="sign-out">-->
                 <p id="sign-out" onclick="sign_out()">Sign out</p>
-<!--            </div>-->
         </div>
     </header>
     <main class="main">
@@ -62,8 +60,8 @@
                 </form>
             </div>
             <div class="error-message" id="error-message-login"></div>
-            <div class="error-message" id="error-password"></div>
-            <div class="error-message" id="error-username"></div>
+            <div class="error-message" id="error-password-miss-l"></div>
+            <div class="error-message" id="error-username-miss-l"></div>
         </div>
         <div class="registration-form-container" id="registration-form-container">
             <div class="form-background">
@@ -80,9 +78,13 @@
                         <label for="email_r"></label>
                         <input class="input" type="email" id="email_r" name="email-input-r" placeholder="Email" required>
                     </div>
-                    <button class="submit-button" type="submit">Sign up</button>
+                    <button class="submit-button" type="submit" id="sign-up-button">Sign up</button>
                 </form>
             </div>
+            <div class="error-message reg" id="error-message-registration"></div>
+            <div class="error-message reg" id="error-email-miss-r"></div>
+            <div class="error-message reg" id="error-password-miss-r"></div>
+            <div class="error-message reg" id="error-username-miss-r"></div>
         </div>
     </main>
     <footer class="footer">

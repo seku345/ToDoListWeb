@@ -79,50 +79,109 @@ function login_submit(event) {
     let is_password_valid = true
 
     if (username.trim() === '') {
-        display_error_message('Missing username!', 'error-username')
+        display_error_message('Missing username!', 'error-username-miss-l')
         is_username_valid = false
     }
 
-    if (password.trim() === '') {
-        display_error_message('Missing password!', 'error-password')
+    else if (password.trim() === '') {
+        display_error_message('Missing password!', 'error-password-miss-l')
         is_password_valid = false
     }
 
-
     if (is_username_valid && is_password_valid) {
         const login_data = {
-        username: username,
-        password: password
-    }
+            username: username,
+            password: password
+        }
 
-    form.reset()
+        form.reset()
 
-    fetch(`http://127.0.0.1:5000/api/login`, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(login_data)
-        })
-        .then(response => {
-            if (!response.ok) {
-                display_error_message('Incorrect login or password!', 'error-message-login')
-                throw new Error('Incorrect login or password!')
-            }
-            return response.json()
-        })
-        .then(data => {
-            current_user = username
-            hide_all_children(login_form)
-            get_user_info()
-        })
-        .catch(error => {
-            console.error('Error:', error)
-        })
+        fetch(`http://127.0.0.1:5000/api/login`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(login_data)
+            })
+            .then(response => {
+                if (!response.ok) {
+                    display_error_message('Incorrect login or password!', 'error-message-login')
+                    throw new Error('Incorrect login or password!')
+                }
+                return response.json()
+            })
+            .then(data => {
+                current_user = username
+                hide_all_children(login_form)
+                get_user_info()
+            })
+            .catch(error => {
+                console.error('Error:', error)
+            })
     }
 }
 
 document.getElementById('login_button').addEventListener('click', login_submit)
+
+function registration_submit(event) {
+    event.preventDefault()
+
+    const form = document.getElementById('r_form')
+    const username = form.querySelector('input[name="username-input-r"]').value
+    const password = form.querySelector('input[name="password-input-r"]').value
+    const email = form.querySelector('input[name="email-input-r"]').value
+
+    let is_username_valid = true
+    let is_password_valid = true
+    let is_email_valid = true
+
+    if (username.trim() === '') {
+        display_error_message('Missing username!', 'error-username-miss-r')
+        is_username_valid = false
+    }
+    else if (password.trim() === '') {
+        display_error_message('Missing password!', 'error-password-miss-r')
+        is_password_valid = false
+    }
+    else if (email.trim() === '') {
+        display_error_message('Missing email!', 'error-email-miss-r')
+        is_email_valid = false
+    }
+
+    const sign_in_data = {
+        username: username,
+        password: password,
+        email: email
+    }
+
+    form.reset()
+    if (is_username_valid && is_password_valid && is_email_valid) {
+        fetch('http://127.0.0.1:5000/api/registration', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(sign_in_data)
+        })
+            .then(response => {
+                if (!response.ok) {
+                    display_error_message('Username is already taken!', 'error-message-registration')
+                    throw new Error('Username is already taken!')
+                }
+                return response.json()
+            })
+            .then(data => {
+                current_user = username
+                hide_all_children(registration_form)
+                get_user_info()
+            })
+            .catch(error => {
+                console.error('Error:', error)
+            })
+    }
+}
+
+document.getElementById('sign-up-button').addEventListener('click', registration_submit)
 
 function get_user_info() {
     fetch(`http://127.0.0.1:5000/api/${current_user}`, {

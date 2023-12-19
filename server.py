@@ -71,7 +71,6 @@ def login():
     data = request.get_json()
     username = data.get('username')
     password = data.get('password')
-    print(username, password)
     if are_username_and_password_correct(DB_NAME, username, password):
         return jsonify({'message': 'User exists'})
     else:
@@ -80,9 +79,10 @@ def login():
 
 @app.route('/api/registration', methods=['POST'])
 def add_user():
-    username = request.form['username']
-    email = request.form['email']
-    password = request.form['password']
+    data = request.get_json()
+    username = data.get('username')
+    password = data.get('password')
+    email = data.get('email')
     if not is_unique_user(DB_NAME, username):
         raise Conflict
     add_user_to_db(DB_NAME, username, email, password)

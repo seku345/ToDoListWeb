@@ -319,6 +319,9 @@
     visibility: visible;
     opacity: 1;
 }
+.error-message.reg {
+    top: 10px;
+}
 .user-info-container {
     box-sizing: border-box;
     display: flex;
