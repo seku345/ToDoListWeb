@@ -332,19 +332,27 @@
     background-color: #43B0F1;
     border-radius: 25px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
-    top: 20px;
+    top: 50px;
     right: 25px;
     padding: 5px 0;
     margin: 0 0 0 auto;
 }
-.user-info-container div {
+.info-line {
+    display: flex;
+    flex-direction: row;
+    justify-items: flex-start;
+    align-items: center;
     box-sizing: border-box;
     text-align: left;
     margin-left: 0;
     margin-top: -7px;
     margin-bottom: -7px;
 }
-.user-info-container p {
+.info-icon {
+    width: 25px;
+    padding-left: 20px;
+}
+.hp {
     margin-left: 0;
     color: #FFFFFF;
     font-size: 20px;
@@ -352,4 +360,15 @@
     font-style: normal;
     font-weight: 400;
     padding: 10px 20px;
+}
+.info-header {
+    top: -45px;
+    position: absolute;
+}
+.info-header-p {
+    color: #0f7dc9;
+    font-size: 30px;
+    text-align: center;
+    font-style: normal;
+    font-weight: 400;
 }
