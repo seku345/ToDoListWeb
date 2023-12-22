@@ -25,23 +25,6 @@
         </div>
     </header>
     <main class="main">
-        <div class="user-info-container" id="user-info">
-            <div class="info-header">
-                <p class="info-header-p">Your Profile</p>
-            </div>
-            <div class="info-line">
-                <img class="info-icon" src="sources/profile_icon.png" alt="Profile: ">
-                <p class="hp"><span id="username_place"></span></p>
-            </div>
-            <div class="info-line">
-                <img class="info-icon" src="sources/password_icon.png" alt="Password: ">
-                <p class="hp"><span id="password_place"></span></p>
-            </div>
-            <div class="info-line">
-                <img class="info-icon" src="sources/mail_icon.png" alt="Email: ">
-                <p class="hp"><span id="email_place"></span></p>
-            </div>
-        </div>
         <div class="main-text" id="main-text">
             <p class="first-slogan">Emblem of Productivity</p>
             <p class="main-description">Your new starting point in time management and goal achievement! Our application is an intelligent companion designed to turn your ideas into actions. From creating task lists to managing priorities, we offer tools that will help you not only manage time but also enhance your productivity.</p>
@@ -88,6 +71,44 @@
             <div class="error-message reg" id="error-email-miss-r"></div>
             <div class="error-message reg" id="error-password-miss-r"></div>
             <div class="error-message reg" id="error-username-miss-r"></div>
+        </div>
+        <div class="tasks" id="tasks">
+            <div class="tasks-title">
+                <p>Your Tasks</p>
+            </div>
+            <div class="tasks-container" id="tasks-container">
+                <table class="tasks-table" id="tasks-table">
+                    <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Description</th>
+                        <th>Date</th>
+                        <th>Time</th>
+                        <th>Status</th>
+                    </tr>
+                    </thead>
+                    <tbody id="tasks-body">
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="user-info-container" id="user-info">
+            <div class="info-header">
+                <p class="info-header-p">Your Profile</p>
+            </div>
+            <div class="info-line">
+                <img class="info-icon" src="sources/profile_icon.png" alt="Profile: ">
+                <p class="hp"><span id="username_place"></span></p>
+            </div>
+            <div class="info-line">
+                <img class="info-icon" src="sources/password_icon.png" alt="Password: ">
+                <p class="hp"><span id="password_place"></span></p>
+            </div>
+            <div class="info-line">
+                <img class="info-icon" src="sources/mail_icon.png" alt="Email: ">
+                <p class="hp"><span id="email_place"></span></p>
+            </div>
         </div>
     </main>
     <footer class="footer">

@@ -100,10 +100,6 @@
     cursor: default;
     width: calc(100% / 3);
     box-sizing: border-box;
-    /*margin: 0;*/
-    /*margin-right: 0;*/
-    /*text-align: center;*/
-    /*vertical-align: center;*/
     text-align: right;
     padding-right: 3%;
 }
@@ -114,7 +110,6 @@
 .sign-out-container p {
     display: inline;
     color: #FFF;
-    /*text-align: right;*/
     font-size: 26px;
     font-style: normal;
     font-weight: 400;
@@ -326,7 +321,7 @@
     box-sizing: border-box;
     display: flex;
     align-items: center;
-    justify-content: flex-start;
+    justify-content: center;
     flex-direction: column;
     position: relative;
     background-color: #43B0F1;
@@ -336,6 +331,7 @@
     right: 25px;
     padding: 5px 0;
     margin: 0 0 0 auto;
+    height: 17vh;
 }
 .info-line {
     display: flex;
@@ -351,6 +347,8 @@
 .info-icon {
     width: 25px;
     padding-left: 20px;
+    cursor: default;
+    pointer-events: none;
 }
 .hp {
     margin-left: 0;
@@ -362,7 +360,7 @@
     padding: 10px 20px;
 }
 .info-header {
-    top: -45px;
+    top: -50px;
     position: absolute;
 }
 .info-header-p {
@@ -371,4 +369,66 @@
     text-align: center;
     font-style: normal;
     font-weight: 400;
+}
+.tasks {
+    width: 70%;
+    overflow-y: auto;
+    margin-top: 3%;
+}
+.tasks-container {
+    background-color: #43B0F1;
+    border-radius: 20px;
+    height: 400px;
+    opacity: 0.8;
+    padding: 0 10px;
+    overflow-x: hidden;
+}
+.tasks-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+.tasks-title {
+
+}
+.tasks-title p {
+    padding-left: 10px;
+    color: #0f7dc9;
+    font-size: 30px;
+    text-align: left;
+    font-style: normal;
+    font-weight: 400;
+}
+.tasks-table thead>tr>th {
+    font-size: 24px;
+    color: #FFFFFF;
+    text-align: left;
+    padding-left: 2px;
+    font-weight: 400;
+}
+.tasks-table tbody>tr {
+    background-color: #FFFFFF;
+    transition: transform 0.2s ease, background-color 0.2s ease;
+    line-height: 1.5;
+    margin-bottom: 20px;
+}
+.tasks-table tbody>tr>td:first-child {
+    border-top-left-radius: 15px;
+    border-bottom-left-radius: 15px;
+}
+.tasks-table tbody>tr>td:last-child {
+    border-top-right-radius: 15px;
+    border-bottom-right-radius: 15px;
+}
+.tasks-table tbody>tr:hover {
+    background-color: #CCCCCC;
+    transform: scale(1.02);
+    z-index: 10;
+    transition: transform 0.2s ease-in-out, background-color 0.2s ease-in-out;
+}
+.tasks-table tbody>tr>td {
+    font-size: 18px;
+    text-align: left;
+    padding: 0 4px;
+    color: #057DCD;
+    border: none;
 }

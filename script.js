@@ -4,11 +4,13 @@ registration_form = document.getElementById('registration-form-container')
 user_info = document.getElementById('user-info')
 header_buttons = document.getElementById('header-buttons')
 sign_out_block = document.getElementById('sign-out-container')
+tasks_container = document.getElementById('tasks')
 
 hide_all_children(login_form)
 hide_all_children(registration_form)
 hide_all_children(user_info)
 hide_all_children(sign_out_block)
+hide_all_children(tasks_container)
 
 let current_user = null
 
@@ -35,9 +37,11 @@ function hide_all_children(parent) {
 }
 
 function to_start_window() {
-    from_login_form()
-    from_registration_form()
-    show_all_children(main_text)
+    if (!current_user == null) {
+        from_login_form()
+        from_registration_form()
+        show_all_children(main_text)
+    }
 }
 
 function to_login_form() {
@@ -114,6 +118,7 @@ function login_submit(event) {
                 current_user = username
                 hide_all_children(login_form)
                 get_user_info()
+                get_user_tasks()
             })
             .catch(error => {
                 console.error('Error:', error)
@@ -174,6 +179,7 @@ function registration_submit(event) {
                 current_user = username
                 hide_all_children(registration_form)
                 get_user_info()
+                get_user_tasks()
             })
             .catch(error => {
                 console.error('Error:', error)
@@ -208,4 +214,35 @@ function sign_out() {
     show_all_children(header_buttons)
     hide_all_children(user_info)
     show_all_children(main_text)
+    hide_all_children(tasks_container)
+}
+
+function get_user_tasks() {
+    fetch(`http://127.0.0.1:5000/api/${current_user}/tasks`, {
+        method: 'GET'
+    })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('There is some error...')
+            }
+            return response.json()
+        })
+        .then(data => {
+            const task_body = document.getElementById('tasks-body')
+            task_body.innerHTML = ''
+            data.forEach(task => {
+                const row = document.createElement('tr')
+                row.innerHTML = `
+                                 <td>${task.name}</td>
+                                 <td>${task.description}</td>
+                                 <td>${task.date}</td>
+                                 <td>${task.time}</td>
+                                 <td>${task.status}</td>`
+                task_body.appendChild(row)
+            })
+        })
+        .catch(error => {
+            console.error('Error:', error)
+        })
+    show_all_children(tasks_container)
 }
