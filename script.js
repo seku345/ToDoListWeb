@@ -5,10 +5,12 @@ user_info = document.getElementById('user-info')
 header_buttons = document.getElementById('header-buttons')
 sign_out_block = document.getElementById('sign-out-container')
 tasks_container = document.getElementById('tasks')
+right_side = document.getElementById('right-side')
+task_info = document.getElementById('task-info')
 
 hide_all_children(login_form)
 hide_all_children(registration_form)
-hide_all_children(user_info)
+hide_all_children(right_side)
 hide_all_children(sign_out_block)
 hide_all_children(tasks_container)
 
@@ -117,6 +119,7 @@ function login_submit(event) {
             .then(data => {
                 current_user = username
                 hide_all_children(login_form)
+                show_all_children(right_side)
                 get_user_info()
                 get_user_tasks()
             })
@@ -178,6 +181,7 @@ function registration_submit(event) {
             .then(data => {
                 current_user = username
                 hide_all_children(registration_form)
+                show_all_children(right_side)
                 get_user_info()
                 get_user_tasks()
             })
@@ -212,6 +216,7 @@ function sign_out() {
     current_user = null
     hide_all_children(sign_out_block)
     show_all_children(header_buttons)
+    hide_all_children(right_side)
     hide_all_children(user_info)
     show_all_children(main_text)
     hide_all_children(tasks_container)
@@ -231,13 +236,15 @@ function get_user_tasks() {
             const task_body = document.getElementById('tasks-body')
             task_body.innerHTML = ''
             data.forEach(task => {
-                const row = document.createElement('tr')
+                const row = document.createElement('div')
+                row.classList.add('tasks-row')
+                row.onclick = () => get_task_info('${task.name}', '${task.description}', '${task.date}', '${task.time}', '${task.status}')
                 row.innerHTML = `
-                                 <td>${task.name}</td>
-                                 <td>${task.description}</td>
-                                 <td>${task.date}</td>
-                                 <td>${task.time}</td>
-                                 <td>${task.status}</td>`
+                                 <div><p>${task.name}</p></div>
+                                 <div><p>${task.description}</p></div>
+                                 <div><p>${task.date}</p></div>
+                                 <div><p>${task.time}</p></div>
+                                 <div><p>${task.status}</p></div>`
                 task_body.appendChild(row)
             })
         })
@@ -245,4 +252,8 @@ function get_user_tasks() {
             console.error('Error:', error)
         })
     show_all_children(tasks_container)
+}
+
+function get_task_info(name, description, date, time, status) {
+
 }

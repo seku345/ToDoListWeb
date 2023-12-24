@@ -77,37 +77,54 @@
                 <p>Your Tasks</p>
             </div>
             <div class="tasks-container" id="tasks-container">
-                <table class="tasks-table" id="tasks-table">
-                    <thead>
-                    <tr>
-                        <th>Name</th>
-                        <th>Description</th>
-                        <th>Date</th>
-                        <th>Time</th>
-                        <th>Status</th>
-                    </tr>
-                    </thead>
-                    <tbody id="tasks-body">
+                <div class="tasks-table" id="tasks-table">
+                    <div class="tasks-table-head">
+                        <div><p>Name</p></div>
+                        <div><p>Description</p></div>
+                        <div><p>Date</p></div>
+                        <div><p>Time</p></div>
+                        <div><p>Status</p></div>
+                    </div>
+                    <div id="tasks-body">
 
-                    </tbody>
-                </table>
+                    </div>
+                </div>
             </div>
         </div>
-        <div class="user-info-container" id="user-info">
-            <div class="info-header">
-                <p class="info-header-p">Your Profile</p>
+        <div class="right-side" id="right-side">
+            <div class="user-info-container" id="user-info">
+                <div class="info-header">
+                    <p class="info-header-p">Your Profile</p>
+                </div>
+                <div class="info-line">
+                    <img class="info-icon" src="sources/profile_icon.png" alt="Profile: ">
+                    <p class="hp"><span id="username_place"></span></p>
+                </div>
+                <div class="info-line">
+                    <img class="info-icon" src="sources/password_icon.png" alt="Password: ">
+                    <p class="hp"><span id="password_place"></span></p>
+                </div>
+                <div class="info-line">
+                    <img class="info-icon" src="sources/mail_icon.png" alt="Email: ">
+                    <p class="hp"><span id="email_place"></span></p>
+                </div>
             </div>
-            <div class="info-line">
-                <img class="info-icon" src="sources/profile_icon.png" alt="Profile: ">
-                <p class="hp"><span id="username_place"></span></p>
-            </div>
-            <div class="info-line">
-                <img class="info-icon" src="sources/password_icon.png" alt="Password: ">
-                <p class="hp"><span id="password_place"></span></p>
-            </div>
-            <div class="info-line">
-                <img class="info-icon" src="sources/mail_icon.png" alt="Email: ">
-                <p class="hp"><span id="email_place"></span></p>
+            <div class="task-info-container" id="task-info">
+                <div class="task-info-header">
+                    <p class="info-header-p">Task Info</p>
+                </div>
+                <div class="task-name">
+                    <p class="hp"><span id="task_name_place"></span></p>
+                </div>
+                <div class="task-description">
+                    <p class="hp"><span id="task_description_place"></span></p>
+                </div>
+                <div class="task-date">
+                    <p class="hp"><span id="task_date_place"></span></p>
+                </div>
+                <div class="task-time">
+                    <p class="hp"><span id="task_time_place"></span></p>
+                </div>
             </div>
         </div>
     </main>

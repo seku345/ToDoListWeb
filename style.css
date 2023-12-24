@@ -73,9 +73,11 @@
     line-height: 40px;
     text-align: center;
     margin-right: -2px;
+    transition: background 0.2s ease;
 }
 .sign-up-button:hover {
     background: #E8EEF1;
+    transition: background 0.2s ease-in-out;
 }
 .login-button {
     background: #3076A4;
@@ -92,9 +94,11 @@
     text-align: center;
     margin-left: -2px;
     margin-right: -95px;
+    transition: background 0.2s ease;
 }
 .login-button:hover {
     background: #395f83;
+    transition: background 0.2s ease-in-out;
 }
 .sign-out-container {
     cursor: default;
@@ -289,9 +293,11 @@
     cursor: pointer;
     outline: none;
     margin: 0;
+    transition: background 0.2s ease;
 }
 .submit-button:hover {
     background-color: #1E3D58;
+    transition: background 0.2s ease-in-out;
 }
 .error-message {
     position: absolute;
@@ -316,6 +322,14 @@
 }
 .error-message.reg {
     top: 10px;
+}
+.right-side {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    margin: 0;
+    box-sizing: border-box;
+    position: relative;
 }
 .user-info-container {
     box-sizing: border-box;
@@ -369,6 +383,7 @@
     text-align: center;
     font-style: normal;
     font-weight: 400;
+    cursor: default;
 }
 .tasks {
     width: 70%;
@@ -381,14 +396,11 @@
     height: 400px;
     opacity: 0.8;
     padding: 0 10px;
-    overflow-x: hidden;
+    overflow: hidden;
 }
 .tasks-table {
     width: 100%;
-    border-collapse: collapse;
-}
-.tasks-title {
-
+    overflow: visible;
 }
 .tasks-title p {
     padding-left: 10px;
@@ -397,38 +409,86 @@
     text-align: left;
     font-style: normal;
     font-weight: 400;
+    cursor: default;
 }
-.tasks-table thead>tr>th {
+.tasks-table-head div {
+    width: 20%;
     font-size: 24px;
     color: #FFFFFF;
     text-align: left;
     padding-left: 2px;
     font-weight: 400;
 }
-.tasks-table tbody>tr {
+.tasks-table-head {
+    display: flex;
+    flex-direction: row;
+    justify-items: center;
+    justify-content: center;
+    align-items: center;
+
+}
+.tasks-row {
     background-color: #FFFFFF;
     transition: transform 0.2s ease, background-color 0.2s ease;
     line-height: 1.5;
-    margin-bottom: 20px;
+    display: flex;
+    flex-direction: row;
+    justify-items: center;
+    justify-content: center;
+    align-items: center;
+    border-radius: 15px;
+    height: 100%;
 }
-.tasks-table tbody>tr>td:first-child {
-    border-top-left-radius: 15px;
-    border-bottom-left-radius: 15px;
-}
-.tasks-table tbody>tr>td:last-child {
-    border-top-right-radius: 15px;
-    border-bottom-right-radius: 15px;
-}
-.tasks-table tbody>tr:hover {
+.tasks-row:hover {
     background-color: #CCCCCC;
     transform: scale(1.02);
+    height: calc(100% + 40px);
     z-index: 10;
-    transition: transform 0.2s ease-in-out, background-color 0.2s ease-in-out;
+    transition: transform 0.2s ease-in-out, background-color 0.2s ease-in-out, height 0.2s ease-in-out;
 }
-.tasks-table tbody>tr>td {
+.tasks-row div {
+    width: 19%;
     font-size: 18px;
     text-align: left;
     padding: 0 4px;
     color: #057DCD;
-    border: none;
+}
+.tasks-row div>p {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+.task-info-container {
+    background-color: #43B0F1;
+    border-radius: 20px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+    width: 100%;
+    box-sizing: border-box;
+    display: flex;
+    justify-content: center;
+    justify-items: center;
+    align-items: center;
+    flex-direction: column;
+    position: relative;
+    height: 53%;
+    top: 50px;
+    right: 25px;
+}
+.task-info-header {
+    position: absolute;
+    top: -50px;
+    text-align: left;
+    padding: 4px;
+}
+.task-name {
+
+}
+.task-description {
+
+}
+.task-date {
+
+}
+.task-time {
+
 }
