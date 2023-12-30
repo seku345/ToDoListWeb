@@ -72,26 +72,33 @@
             <div class="error-message reg" id="error-password-miss-r"></div>
             <div class="error-message reg" id="error-username-miss-r"></div>
         </div>
-        <div class="tasks" id="tasks">
-            <div class="tasks-title">
-                <p>Your Tasks</p>
-            </div>
-            <div class="tasks-container" id="tasks-container">
-                <div class="tasks-table" id="tasks-table">
-                    <div class="tasks-table-head">
-                        <div><p>Name</p></div>
-                        <div><p>Description</p></div>
-                        <div><p>Date</p></div>
-                        <div><p>Time</p></div>
-                        <div><p>Status</p></div>
-                    </div>
-                    <div id="tasks-body">
+        <div class="main-window" id="main-window">
+            <div class="tasks" id="tasks">
+                <div class="tasks-title">
+                    <p>Your Tasks</p>
+                </div>
+                <div class="tasks-container" id="tasks-container">
+                    <div class="tasks-table" id="tasks-table">
+                        <div class="tasks-table-head">
+                            <div><p>Name</p></div>
+                            <div><p>Description</p></div>
+                            <div><p>Date</p></div>
+                            <div><p>Time</p></div>
+                            <div><p>Status</p></div>
+                        </div>
+                        <div id="tasks-body">
 
+                        </div>
                     </div>
                 </div>
+                <div class="tasks-buttons">
+                    <button class="task-button" id="add-button">Add Task</button>
+<!--                    <button class="task-button" id="sort-button">Sort Tasks</button>-->
+                    <button class="task-button" id="export-button">Export Task Table</button>
+                    <button class="task-button" id="undo-button">Undo</button>
+
+                </div>
             </div>
-        </div>
-        <div class="right-side" id="right-side">
             <div class="user-info-container" id="user-info">
                 <div class="info-header">
                     <p class="info-header-p">Your Profile</p>

@@ -5,16 +5,19 @@ user_info = document.getElementById('user-info')
 header_buttons = document.getElementById('header-buttons')
 sign_out_block = document.getElementById('sign-out-container')
 tasks_container = document.getElementById('tasks')
-right_side = document.getElementById('right-side')
 task_info = document.getElementById('task-info')
+main_window = document.getElementById('main-window')
 
 hide_all_children(login_form)
 hide_all_children(registration_form)
-hide_all_children(right_side)
 hide_all_children(sign_out_block)
-hide_all_children(tasks_container)
+hide_all_children(main_window)
+// hide_all_children(user_info)
+// hide_all_children(tasks_container)
+// hide_all_children(task_info)
 
 let current_user = null
+let current_task = null
 
 function show_all_children(parent) {
     parent.classList.remove('hidden')
@@ -119,7 +122,8 @@ function login_submit(event) {
             .then(data => {
                 current_user = username
                 hide_all_children(login_form)
-                show_all_children(right_side)
+                show_all_children(main_window)
+                hide_all_children(task_info)
                 get_user_info()
                 get_user_tasks()
             })
@@ -181,7 +185,8 @@ function registration_submit(event) {
             .then(data => {
                 current_user = username
                 hide_all_children(registration_form)
-                show_all_children(right_side)
+                show_all_children(main_window)
+                hide_all_children(task_info)
                 get_user_info()
                 get_user_tasks()
             })
@@ -214,9 +219,9 @@ function get_user_info() {
 
 function sign_out() {
     current_user = null
+    hide_all_children(main_window)
     hide_all_children(sign_out_block)
     show_all_children(header_buttons)
-    hide_all_children(right_side)
     hide_all_children(user_info)
     show_all_children(main_text)
     hide_all_children(tasks_container)
@@ -238,7 +243,7 @@ function get_user_tasks() {
             data.forEach(task => {
                 const row = document.createElement('div')
                 row.classList.add('tasks-row')
-                row.onclick = () => get_task_info('${task.name}', '${task.description}', '${task.date}', '${task.time}', '${task.status}')
+                row.onclick = () => get_task_info(task.id)
                 row.innerHTML = `
                                  <div><p>${task.name}</p></div>
                                  <div><p>${task.description}</p></div>
@@ -254,6 +259,36 @@ function get_user_tasks() {
     show_all_children(tasks_container)
 }
 
-function get_task_info(name, description, date, time, status) {
+function get_task_info(task_id) {
+    if (current_task === task_id) {
+        hide_all_children(task_info)
+        current_task = null
+        return
+    }
+    current_task = task_id
 
+    const name_place = document.getElementById('task_name_place')
+    const description_place = document.getElementById('task_description_place')
+    const date_place = document.getElementById('task_date_place')
+    const time_place = document.getElementById('task_time_place')
+
+    fetch(`http://127.0.0.1:5000/api/${current_user}/tasks/${task_id}`, {
+        method: 'GET'
+    })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Getting task error!')
+            }
+            return response.json()
+        })
+        .then(data => {
+            name_place.innerText = data.name
+            description_place.innerText = data.description
+            date_place.innerText = data.date
+            time_place.innerText = data.time
+        })
+        .catch(error => {
+            console.error('Error:', error)
+        })
+    show_all_children(task_info)
 }
