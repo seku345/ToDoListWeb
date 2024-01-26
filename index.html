@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <title>ToDoList App</title>
     <link rel="stylesheet" href="style.css">
+    <link rel="preload" href="script.js" as="script">
+    <script src="script.js" defer></script>
 </head>
 <body>
     <div class="background-container">
@@ -20,7 +22,7 @@
             <button class="sign-up-button" onclick="from_login_form(); to_registration_form()">Sign up</button>
             <button class="login-button" onclick="from_registration_form(); to_login_form()">Login</button>
         </div>
-        <div class="sign-out-container" id="sign-out-container">
+        <div class="sign-out-container hidden" id="sign-out-container">
                 <p id="sign-out" onclick="sign_out()">Sign out</p>
         </div>
     </header>
@@ -31,7 +33,7 @@
             <p class="second-slogan">Your Tasks, Your Way</p>
             <p class="invite-message">Join us and achieve more!</p>
         </div>
-        <div class="login-form-container" id="login-form-container">
+        <div class="login-form-container hidden" id="login-form-container">
             <div class="form-background">
                 <form class="form" id="l_form">
                     <div class="input-container">
@@ -49,7 +51,7 @@
             <div class="error-message" id="error-password-miss-l"></div>
             <div class="error-message" id="error-username-miss-l"></div>
         </div>
-        <div class="registration-form-container" id="registration-form-container">
+        <div class="registration-form-container hidden" id="registration-form-container">
             <div class="form-background">
                 <form class="form" id="r_form">
                     <div class="input-container">
@@ -72,7 +74,7 @@
             <div class="error-message reg" id="error-password-miss-r"></div>
             <div class="error-message reg" id="error-username-miss-r"></div>
         </div>
-        <div class="main-window" id="main-window">
+        <div class="main-window hidden" id="main-window">
             <div class="tasks" id="tasks">
                 <div class="tasks-title">
                     <p>Your Tasks</p>
@@ -86,17 +88,45 @@
                             <div><p>Time</p></div>
                             <div><p>Status</p></div>
                         </div>
-                        <div id="tasks-body">
+                        <div class="tasks-body" id="tasks-body">
 
                         </div>
                     </div>
                 </div>
                 <div class="tasks-buttons">
-                    <button class="task-button" id="add-button">Add Task</button>
-<!--                    <button class="task-button" id="sort-button">Sort Tasks</button>-->
+                    <button class="task-button" id="add-button" onclick="to_adding_task()">Add Task</button>
                     <button class="task-button" id="export-button">Export Task Table</button>
                     <button class="task-button" id="undo-button">Undo</button>
-
+                </div>
+            </div>
+            <div class="adding-task-form-container hidden" id="adding-task-form-container">
+                <div class="form-background-add">
+                    <form class="form-add" id="add-task-form">
+                        <div class="left-side">
+                            <div class="input-container">
+                                <label for="task_name"></label>
+                                <input class="input" type="text" id="task_name" name="task_name" placeholder="Task Title" required>
+                            </div>
+                            <div class="input-container">
+                                <label for="task_time"></label>
+                                <input class="input" type="time" id="task_time" name="task_time" placeholder="Time Deadline">
+                            </div>
+                            <div class="input-container">
+                                <label for="task_date"></label>
+                                 <input class="input" type="date" id="task_date" name="task_date" placeholder="Date Deadline">
+                            </div>
+                            <div class="left-buttons">
+                                <button class="back-button" id="back-button-add">Back</button>
+                                <button class="add-button" id="add-button-add">Add Task</button>
+                            </div>
+                        </div>
+                        <div class="right-side">
+                            <div class="input-container">
+                                <label for="task_description"></label>
+                                <textarea class="textarea" id="task_description" name="task_description" placeholder="Description"></textarea>
+                            </div>
+                        </div>
+                    </form>
                 </div>
             </div>
             <div class="user-info-container" id="user-info">
@@ -152,6 +182,5 @@
             </div>
         </div>
     </footer>
-    <script src="script.js"></script>
 </body>
 </html>

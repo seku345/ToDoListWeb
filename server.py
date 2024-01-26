@@ -91,10 +91,11 @@ def add_user():
 
 @app.route('/api/<string:username>/tasks', methods=['POST'])
 def add_task(username: str):
-    task_name = request.form['task_name']
-    task_description = request.form['task_description']
-    task_date = request.form['task_date']
-    task_time = request.form['task_time']
+    data = request.get_json()
+    task_name = data.get('task_name')
+    task_description = data.get('task_description')
+    task_time = data.get('task_time')
+    task_date = data.get('task_date')
     if add_task_to_db(DB_NAME, username, task_name, task_description, task_date, task_time):
         raise NotFound
     return jsonify({'message': 'Task added successfully!'})

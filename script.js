@@ -7,11 +7,12 @@ sign_out_block = document.getElementById('sign-out-container')
 tasks_container = document.getElementById('tasks')
 task_info = document.getElementById('task-info')
 main_window = document.getElementById('main-window')
+adding_task_container = document.getElementById('adding-task-form-container')
 
-hide_all_children(login_form)
-hide_all_children(registration_form)
-hide_all_children(sign_out_block)
-hide_all_children(main_window)
+// hide_all_children(login_form)
+// hide_all_children(registration_form)
+// hide_all_children(sign_out_block)
+// hide_all_children(main_window)
 // hide_all_children(user_info)
 // hide_all_children(tasks_container)
 // hide_all_children(task_info)
@@ -124,6 +125,7 @@ function login_submit(event) {
                 hide_all_children(login_form)
                 show_all_children(main_window)
                 hide_all_children(task_info)
+                hide_all_children(adding_task_container)
                 get_user_info()
                 get_user_tasks()
             })
@@ -187,6 +189,7 @@ function registration_submit(event) {
                 hide_all_children(registration_form)
                 show_all_children(main_window)
                 hide_all_children(task_info)
+                hide_all_children(adding_task_container)
                 get_user_info()
                 get_user_tasks()
             })
@@ -292,3 +295,58 @@ function get_task_info(task_id) {
         })
     show_all_children(task_info)
 }
+
+function  to_adding_task() {
+    hide_all_children(tasks_container)
+    hide_all_children(task_info)
+    show_all_children(adding_task_container)
+}
+
+function back_to_task_list(event) {
+    event.preventDefault()
+    const form = document.getElementById('add-task-form')
+    form.reset()
+    hide_all_children(adding_task_container)
+    get_user_tasks()
+}
+
+document.getElementById('back-button-add').addEventListener('click', back_to_task_list)
+
+function add_task(event) {
+    event.preventDefault()
+
+    const form = document.getElementById('add-task-form')
+    const title = form.querySelector('input[name="task_name"]').value
+    const description = form.querySelector('textarea[name="task_description"]').value
+    const time = form.querySelector('input[name="task_time"]').value
+    const date = form.querySelector('input[name="task_date"]').value
+
+    console.log(time === '', date === '')
+
+    const task_data = {
+        task_name: title,
+        task_description: description,
+        task_time: time,
+        task_date: date
+    }
+
+    fetch(`http://127.0.0.1:5000/api/${current_user}/tasks`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(task_data)
+    })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Error with adding new task')
+            }
+            return response.json()
+        })
+        .then(data => {
+            back_to_task_list(event)
+        })
+
+}
+
+document.getElementById('add-button-add').addEventListener('click', add_task)
