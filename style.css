@@ -330,6 +330,9 @@
 .error-message.reg {
     top: 10px;
 }
+.error-message.add {
+    top: -55px;
+}
 .main-window {
     position: absolute;
     width: 100%;
@@ -397,14 +400,14 @@
 .tasks-container {
     background-color: #43B0F1;
     border-radius: 20px 20px 0 0;
-    height: 70%;
+    height: 80%;
     opacity: 0.8;
-    padding: 0 10px;
     overflow-y: hidden;
     overflow-x: visible;
+    padding: 0 10px 5px;
 }
 .tasks-body {
-    height: 30vh;
+    height: 35vh;
     overflow-y: scroll;
     -ms-overflow-style: none;
     scrollbar-width: none;
@@ -460,8 +463,7 @@
 }
 .tasks-row:hover {
     background-color: #CCCCCC;
-    transform: scale(1.015);
-    /*height: 30px;*/
+    transform: scale(1.01);
     z-index: 10;
     transition: transform 0.2s ease-in-out, background-color 0.2s ease-in-out;
 }
@@ -482,10 +484,7 @@
     box-sizing: border-box;
     display: flex;
     flex-direction: row;
-    /*justify-items: center;*/
     justify-content: flex-start;
-    /*align-items: flex-start;*/
-    /*background-color: #43B0F1;*/
     border-top: 1px solid #FFFFFF;
     border-radius: 0 0 20px 20px;
     height: 50px;
@@ -538,10 +537,11 @@
     align-items: flex-start;
     flex-direction: column;
     position: fixed;
-    bottom: 22%;
+    bottom: 17%;
     right: 2%;
     width: 300px;
     margin: 0;
+    height: 270px;
 }
 .task-info-header {
     position: absolute;
@@ -559,9 +559,14 @@
 }
 .task-description {
     margin-left: 0;
+    max-height: 120px;
+    overflow: hidden;
 }
 .task-description p {
     text-align: left;
+    padding-top: 0;
+    overflow-wrap: anywhere;
+    text-overflow: ellipsis;
 }
 .task-date {
     margin-left: 0;
@@ -576,13 +581,10 @@
 
 }
 .adding-task-form-container {
-    width: 55%;
     position: absolute;
     left: 50%;
     top: 50%;
     transform: translate(-50%, 25%);
-    /*width: 40%;*/
-    /*height: 60%;*/
 }
 .form-background-add {
     background-color: #3d84b6;
@@ -594,16 +596,14 @@
     display: flex;
     flex-direction: row;
     justify-content: center;
-    /*align-items: center;*/
 }
 .left-side {
-    width: 200px;
     display: flex;
+    margin: 0;
     flex-direction: column;
     justify-content: space-between;
 }
 .right-side {
-    width: 300px;
     padding-left: 60px;
     padding-right: 40px;
     display: flex;

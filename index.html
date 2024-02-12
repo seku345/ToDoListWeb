@@ -48,8 +48,6 @@
                 </form>
             </div>
             <div class="error-message" id="error-message-login"></div>
-            <div class="error-message" id="error-password-miss-l"></div>
-            <div class="error-message" id="error-username-miss-l"></div>
         </div>
         <div class="registration-form-container hidden" id="registration-form-container">
             <div class="form-background">
@@ -70,9 +68,6 @@
                 </form>
             </div>
             <div class="error-message reg" id="error-message-registration"></div>
-            <div class="error-message reg" id="error-email-miss-r"></div>
-            <div class="error-message reg" id="error-password-miss-r"></div>
-            <div class="error-message reg" id="error-username-miss-r"></div>
         </div>
         <div class="main-window hidden" id="main-window">
             <div class="tasks" id="tasks">
@@ -119,11 +114,12 @@
                                 <button class="back-button" id="back-button-add">Back</button>
                                 <button class="add-button" id="add-button-add">Add Task</button>
                             </div>
+                            <div class="error-message add" id="error-message-add"></div>
                         </div>
                         <div class="right-side">
                             <div class="input-container">
                                 <label for="task_description"></label>
-                                <textarea class="textarea" id="task_description" name="task_description" placeholder="Description"></textarea>
+                                <textarea class="textarea" id="task_description" name="task_description" maxlength="160" placeholder="Description"></textarea>
                             </div>
                         </div>
                     </form>

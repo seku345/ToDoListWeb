@@ -43,7 +43,7 @@ function hide_all_children(parent) {
 }
 
 function to_start_window() {
-    if (!current_user == null) {
+    if (current_user == null) {
         from_login_form()
         from_registration_form()
         show_all_children(main_text)
@@ -51,6 +51,8 @@ function to_start_window() {
 }
 
 function to_login_form() {
+    document.getElementById('l_form').reset()
+    document.getElementById('r_form').reset()
     hide_all_children(main_text)
     show_all_children(login_form)
 }
@@ -60,6 +62,8 @@ function from_login_form() {
 }
 
 function to_registration_form() {
+    document.getElementById('l_form').reset()
+    document.getElementById('r_form').reset()
     hide_all_children(main_text)
     show_all_children(registration_form)
 }
@@ -89,12 +93,12 @@ function login_submit(event) {
     let is_password_valid = true
 
     if (username.trim() === '') {
-        display_error_message('Missing username!', 'error-username-miss-l')
+        display_error_message('Missing username!', 'error-message-login')
         is_username_valid = false
     }
 
     else if (password.trim() === '') {
-        display_error_message('Missing password!', 'error-password-miss-l')
+        display_error_message('Missing password!', 'error-message-login')
         is_password_valid = false
     }
 
@@ -150,15 +154,15 @@ function registration_submit(event) {
     let is_email_valid = true
 
     if (username.trim() === '') {
-        display_error_message('Missing username!', 'error-username-miss-r')
+        display_error_message('Missing username!', 'error-message-registration')
         is_username_valid = false
     }
     else if (password.trim() === '') {
-        display_error_message('Missing password!', 'error-password-miss-r')
+        display_error_message('Missing password!', 'error-message-registration')
         is_password_valid = false
     }
     else if (email.trim() === '') {
-        display_error_message('Missing email!', 'error-email-miss-r')
+        display_error_message('Missing email!', 'error-message-registration')
         is_email_valid = false
     }
 
@@ -168,8 +172,8 @@ function registration_submit(event) {
         email: email
     }
 
-    form.reset()
     if (is_username_valid && is_password_valid && is_email_valid) {
+        form.reset()
         fetch('http://127.0.0.1:5000/api/registration', {
             method: 'POST',
             headers: {
@@ -321,32 +325,44 @@ function add_task(event) {
     const time = form.querySelector('input[name="task_time"]').value
     const date = form.querySelector('input[name="task_date"]').value
 
-    console.log(time === '', date === '')
+    if (title.trim() === '') {
+        display_error_message('Missing Task Title!', 'error-message-add')
+    } else {
 
-    const task_data = {
-        task_name: title,
-        task_description: description,
-        task_time: time,
-        task_date: date
+        const task_data = {
+            task_name: title,
+            task_description: description,
+            task_time: time,
+            task_date: date
+        }
+
+        fetch(`http://127.0.0.1:5000/api/${current_user}/tasks`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(task_data)
+        })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Error with adding new task')
+                }
+                return response.json()
+            })
+            .then(data => {
+                back_to_task_list(event)
+            })
     }
-
-    fetch(`http://127.0.0.1:5000/api/${current_user}/tasks`, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(task_data)
-    })
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('Error with adding new task')
-            }
-            return response.json()
-        })
-        .then(data => {
-            back_to_task_list(event)
-        })
-
 }
 
 document.getElementById('add-button-add').addEventListener('click', add_task)
+
+// TODO NEW SPLIT LOGIC
+document.getElementById('task_description').addEventListener('input', () => {
+    const lines = document.getElementById('task_description').value.split('\n')
+    const max_rows = 7
+
+    if (lines.length > max_rows) {
+        document.getElementById('task_description').value = lines.splice(0, max_rows).join('\n')
+    }
+})
