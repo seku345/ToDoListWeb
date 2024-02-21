@@ -528,7 +528,7 @@
 }
 .task-info-container {
     background-color: #43B0F1;
-    border-radius: 20px;
+    border-radius: 0 20px 20px 0;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
     box-sizing: border-box;
     display: flex;
@@ -664,4 +664,68 @@
     position: relative;
     top: 50%;
     transform: translateY(-50%);
+}
+.task-info-buttons-container {
+    position: fixed;
+    height: 270px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    align-items: center;
+    transform: translateX(-30px);
+}
+.task-info-buttons {
+    width: 30px;
+    height: 50px;
+    padding-left: 2px;
+    padding-right: 0;
+    border: 1px solid #3076A4;
+    transition: background-color 0.2s ease;
+    background-color: #057DCD;
+    color: #FFFFFF;
+    margin: 0;
+}
+.task-info-buttons img {
+    width: 25px;
+}
+.task-info-buttons:first-child {
+    border-radius: 20px 0 0 20px;
+    margin-bottom: auto;
+    background-color: #3d84b6;
+}
+#status-button-radio {
+    display: none;
+    z-index: 10;
+}
+#status-button-radio-label {
+    z-index: 10;
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    border: 2px solid #FFFFFF;
+    border-radius: 50%;
+    transition: background-color 0.3s ease;
+}
+#status-button-radio:checked + #status-button-radio-label {
+    background-color: #FFFFFF;
+}
+.task-info-buttons:nth-child(2) {
+    border-radius: 20px 0 0 0;
+}
+.task-info-buttons:not(:first-child):not(:nth-child(2)):not(:last-child) {
+
+}
+.task-info-buttons:last-child {
+    border-radius: 0 0 0 20px;
+}
+.task-info-buttons:not(:first-child):hover {
+    background-color: #3d84b6;
+    transition: background-color 0.2s ease-in-out;
+}
+.task-info-buttons:first-child:hover {
+    background-color: #0f7dc9;
+    transition: background-color 0.2s ease-in-out;
+}
+.task-info-buttons img {
+
 }
