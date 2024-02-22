@@ -410,3 +410,25 @@ function change_task_status(event) {
 }
 
 document.getElementById('status-button-radio-label').addEventListener('click', change_task_status)
+
+function delete_task() {
+    fetch(`http://127.0.0.1:5000/api/${current_user}/tasks/${current_task}`, {
+        method: 'DELETE',
+    })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error("Delete task error")
+            }
+            return response.json()
+        })
+        .then(data => {
+            get_user_tasks()
+            hide_all_children(task_info)
+            current_task = null
+        })
+        .catch(error => {
+            console.error('Error:', error)
+        })
+}
+
+document.getElementById('delete-button').addEventListener('click', delete_task)
