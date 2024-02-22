@@ -689,6 +689,7 @@
     width: 25px;
 }
 .task-info-buttons:first-child {
+    padding-left: 1px;
     border-radius: 20px 0 0 20px;
     margin-bottom: auto;
     background-color: #3d84b6;
@@ -700,8 +701,8 @@
 #status-button-radio-label {
     z-index: 10;
     display: inline-block;
-    width: 20px;
-    height: 20px;
+    width: 23px;
+    height: 23px;
     border: 2px solid #FFFFFF;
     border-radius: 50%;
     transition: background-color 0.3s ease;

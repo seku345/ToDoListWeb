@@ -19,6 +19,7 @@ adding_task_container = document.getElementById('adding-task-form-container')
 
 let current_user = null
 let current_task = null
+let current_status = null
 
 function show_all_children(parent) {
     parent.classList.remove('hidden')
@@ -278,6 +279,7 @@ function get_task_info(task_id) {
     const description_place = document.getElementById('task_description_place')
     const date_place = document.getElementById('task_date_place')
     const time_place = document.getElementById('task_time_place')
+    const label = document.getElementById('status-button-radio-label')
 
     fetch(`http://127.0.0.1:5000/api/${current_user}/tasks/${task_id}`, {
         method: 'GET'
@@ -293,6 +295,12 @@ function get_task_info(task_id) {
             description_place.innerText = data.description
             date_place.innerText = data.date
             time_place.innerText = data.time
+            current_status = (data.status === '✔')
+            if (current_status) {
+                label.style.background = 'white'
+            } else {
+                label.style.background = ''
+            }
         })
         .catch(error => {
             console.error('Error:', error)
@@ -352,6 +360,9 @@ function add_task(event) {
             .then(data => {
                 back_to_task_list(event)
             })
+            .catch(error => {
+                console.error("Error:", error)
+            })
     }
 }
 
@@ -366,3 +377,36 @@ document.getElementById('task_description').addEventListener('input', () => {
         document.getElementById('task_description').value = lines.splice(0, max_rows).join('\n')
     }
 })
+
+function change_task_status(event) {
+    event.preventDefault()
+
+    fetch(`http://127.0.0.1:5000/api/${current_user}/tasks/${current_task}/status`, {
+        method: 'PUT',
+    })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Changing task status error')
+            }
+            return response.json()
+        })
+        .then(data => {
+            const label = document.getElementById('status-button-radio-label')
+            console.log(current_status)
+            if (current_status === true) {
+                label.style.background = ''
+                current_status = false
+            } else if (current_status === false) {
+                label.style.background = 'white'
+                current_status = true
+            } else {
+                throw new Error('Status error')
+            }
+            get_user_tasks()
+        })
+        .catch(error => {
+            console.error('Error:', error)
+        })
+}
+
+document.getElementById('status-button-radio-label').addEventListener('click', change_task_status)
