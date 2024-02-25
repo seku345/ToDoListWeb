@@ -392,7 +392,6 @@ function change_task_status(event) {
         })
         .then(data => {
             const label = document.getElementById('status-button-radio-label')
-            console.log(current_status)
             if (current_status === true) {
                 label.style.background = ''
                 current_status = false
@@ -432,3 +431,9 @@ function delete_task() {
 }
 
 document.getElementById('delete-button').addEventListener('click', delete_task)
+
+function show_task_description() {
+
+}
+
+document.getElementById('more-button').addEventListener('click', show_task_description)
