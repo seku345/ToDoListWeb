@@ -8,14 +8,10 @@ tasks_container = document.getElementById('tasks')
 task_info = document.getElementById('task-info')
 main_window = document.getElementById('main-window')
 adding_task_container = document.getElementById('adding-task-form-container')
-
-// hide_all_children(login_form)
-// hide_all_children(registration_form)
-// hide_all_children(sign_out_block)
-// hide_all_children(main_window)
-// hide_all_children(user_info)
-// hide_all_children(tasks_container)
-// hide_all_children(task_info)
+task_title = document.getElementById('task-info-title')
+task_description = document.getElementById('task-info-description')
+task_date = document.getElementById('task-info-date')
+task_time = document.getElementById('task-info-time')
 
 let current_user = null
 let current_task = null
@@ -236,6 +232,8 @@ function sign_out() {
 }
 
 function get_user_tasks() {
+    is_big_desc = true
+    show_task_description()
     fetch(`http://127.0.0.1:5000/api/${current_user}/tasks`, {
         method: 'GET'
     })
@@ -268,6 +266,8 @@ function get_user_tasks() {
 }
 
 function get_task_info(task_id) {
+    is_big_desc = true
+    show_task_description()
     if (current_task === task_id) {
         hide_all_children(task_info)
         current_task = null
@@ -432,8 +432,25 @@ function delete_task() {
 
 document.getElementById('delete-button').addEventListener('click', delete_task)
 
+let is_big_desc = false
 function show_task_description() {
-
+    if (!is_big_desc) {
+        hide_all_children(task_title)
+        hide_all_children(task_date)
+        hide_all_children(task_time)
+        task_description.classList.add('task-description-extended')
+        task_date.classList.add('task-date-extended')
+        task_time.classList.add('task-time-extended')
+        is_big_desc = true
+    } else {
+        show_all_children(task_title)
+        show_all_children(task_date)
+        show_all_children(task_time)
+        task_description.classList.remove('task-description-extended')
+        task_date.classList.remove('task-date-extended')
+        task_time.classList.remove('task-time-extended')
+        is_big_desc = false
+    }
 }
 
 document.getElementById('more-button').addEventListener('click', show_task_description)
