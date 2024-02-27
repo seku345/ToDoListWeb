@@ -620,6 +620,9 @@
     top: 50%;
     transform: translate(-50%, 25%);
 }
+.edit {
+    left: 35%;
+}
 .form-background-add {
     background-color: #3d84b6;
     border-radius: 40px;

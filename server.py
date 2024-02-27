@@ -113,11 +113,12 @@ def edit_user_info(username: str):
 
 @app.route('/api/<string:username>/tasks/<int:task_id>', methods=['PUT'])
 def edit_task(username: str, task_id: int):
-    new_name = request.form['new_name']
-    new_description = request.form['new_description']
-    new_date = request.form['new_date']
-    new_time = request.form['new_time']
-    if edit_task_in_db(DB_NAME, username, task_id, new_name, new_description, new_date, new_time):
+    data = request.get_json()
+    new_task_name = data.get('task_name')
+    new_task_description = data.get('task_description')
+    new_task_time = data.get('task_time')
+    new_task_date = data.get('task_date')
+    if edit_task_in_db(DB_NAME, username, task_id, new_task_name, new_task_description, new_task_date, new_task_time):
         raise NotFound
     return jsonify({'message': 'Task edited successfully!'})
 

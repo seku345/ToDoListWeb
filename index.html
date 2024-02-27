@@ -142,6 +142,37 @@
                     <p class="hp"><span id="email_place"></span></p>
                 </div>
             </div>
+            <div class="adding-task-form-container edit hidden" id="editing-task-form-container">
+                <div class="form-background-add">
+                    <form class="form-add" id="edit-task-form">
+                        <div class="left-side">
+                            <div class="input-container">
+                                <label for="task_name_e"></label>
+                                <input class="input" type="text" id="task_name_e" name="task_name_e" placeholder="Task Title" maxlength="28" required>
+                            </div>
+                            <div class="input-container">
+                                <label for="task_time_e"></label>
+                                <input class="input" type="time" id="task_time_e" name="task_time_e" placeholder="Time Deadline">
+                            </div>
+                            <div class="input-container">
+                                <label for="task_date_e"></label>
+                                 <input class="input" type="date" id="task_date_e" name="task_date_e" placeholder="Date Deadline">
+                            </div>
+                            <div class="left-buttons">
+                                <button class="back-button" id="back-button-edit">Back</button>
+                                <button class="add-button" id="save-button">Save</button>
+                            </div>
+                            <div class="error-message add" id="error-message-edit"></div>
+                        </div>
+                        <div class="right-side">
+                            <div class="input-container">
+                                <label for="task_description_e"></label>
+                                <textarea class="textarea" id="task_description_e" name="task_description_e" maxlength="160" placeholder="Description"></textarea>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
             <div class="task-info-container" id="task-info">
                 <div class="task-info-buttons-container">
                     <button class="task-info-buttons" id="status-button">

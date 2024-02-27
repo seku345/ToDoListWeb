@@ -12,10 +12,17 @@ task_title = document.getElementById('task-info-title')
 task_description = document.getElementById('task-info-description')
 task_date = document.getElementById('task-info-date')
 task_time = document.getElementById('task-info-time')
+editing_task_container = document.getElementById('editing-task-form-container')
 
 let current_user = null
 let current_task = null
 let current_status = null
+let task = {
+    task_name: null,
+    task_description: null,
+    task_date: null,
+    task_time: null
+}
 
 function show_all_children(parent) {
     parent.classList.remove('hidden')
@@ -127,6 +134,7 @@ function login_submit(event) {
                 show_all_children(main_window)
                 hide_all_children(task_info)
                 hide_all_children(adding_task_container)
+                hide_all_children(editing_task_container)
                 get_user_info()
                 get_user_tasks()
             })
@@ -295,6 +303,10 @@ function get_task_info(task_id) {
             description_place.innerText = data.description
             date_place.innerText = data.date
             time_place.innerText = data.time
+            task.task_name = data.name
+            task.task_description = data.description
+            task.task_date = data.date
+            task.task_time = data.time
             current_status = (data.status === '✔')
             if (current_status) {
                 label.style.background = 'white'
@@ -401,7 +413,9 @@ function change_task_status(event) {
             } else {
                 throw new Error('Status error')
             }
-            get_user_tasks()
+            if (!is_editing_task) {
+                get_user_tasks()
+            }
         })
         .catch(error => {
             console.error('Error:', error)
@@ -423,6 +437,8 @@ function delete_task() {
         .then(data => {
             get_user_tasks()
             hide_all_children(task_info)
+            hide_all_children(editing_task_container)
+            is_editing_task = false
             current_task = null
         })
         .catch(error => {
@@ -454,3 +470,88 @@ function show_task_description() {
 }
 
 document.getElementById('more-button').addEventListener('click', show_task_description)
+
+let is_editing_task = false
+
+document.getElementById('edit-button').addEventListener('click', (event) => {
+    if (is_editing_task) {
+        back_to_task_info(event)
+        is_editing_task = false
+    } else {
+        to_editing_task()
+        is_editing_task = true
+    }
+})
+
+function  to_editing_task() {
+    hide_all_children(tasks_container)
+    document.getElementById('task_name_e').value = task.task_name
+    document.getElementById('task_description_e').value = task.task_description
+    document.getElementById('task_date_e').value = task.task_date
+    document.getElementById('task_time_e').value = task.task_time
+    show_all_children(editing_task_container)
+}
+
+function back_to_task_info(event) {
+    event.preventDefault()
+    is_editing_task = false
+    document.getElementById('task_name_e').value = task.task_name
+    document.getElementById('task_description_e').value = task.task_description
+    document.getElementById('task_date_e').value = task.task_date
+    document.getElementById('task_time_e').value = task.task_time
+    hide_all_children(editing_task_container)
+    get_user_tasks()
+}
+
+document.getElementById('back-button-edit').addEventListener('click', back_to_task_info)
+
+function edit_task(event) {
+    event.preventDefault()
+
+    const title = document.getElementById('task_name_e').value
+    const description = document.getElementById('task_description_e').value
+    const time = document.getElementById('task_time_e').value
+    const date = document.getElementById('task_date_e').value
+
+    if (title.trim() === '') {
+        display_error_message('Missing Task Title!', 'error-message-edit')
+    } else {
+
+        const task_data = {
+            task_name: title,
+            task_description: description,
+            task_time: time,
+            task_date: date
+        }
+
+        fetch(`http://127.0.0.1:5000/api/${current_user}/tasks/${current_task}`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(task_data)
+        })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Error with editing the task')
+                }
+                return response.json()
+            })
+            .then(data => {
+                task.name = title
+                task.description = description
+                task.date = date
+                task.time = time
+                is_editing_task = false
+                back_to_task_info(event)
+                const temp = current_task;
+                current_task = null
+                get_task_info(temp)
+            })
+            .catch(error => {
+                console.error("Error:", error)
+            })
+    }
+}
+
+document.getElementById('save-button').addEventListener('click', edit_task)
