@@ -199,6 +199,7 @@ function registration_submit(event) {
                 show_all_children(main_window)
                 hide_all_children(task_info)
                 hide_all_children(adding_task_container)
+                hide_all_children(editing_task_container)
                 get_user_info()
                 get_user_tasks()
             })
@@ -231,6 +232,14 @@ function get_user_info() {
 
 function sign_out() {
     current_user = null
+    current_task = null
+    current_status = null
+    task = {
+    task_name: null,
+    task_description: null,
+    task_date: null,
+    task_time: null
+}
     hide_all_children(main_window)
     hide_all_children(sign_out_block)
     show_all_children(header_buttons)
@@ -555,3 +564,20 @@ function edit_task(event) {
 }
 
 document.getElementById('save-button').addEventListener('click', edit_task)
+
+function delete_user() {
+    fetch(`http://127.0.0.1:5000/api/${current_user}`, {
+        method: 'DELETE',
+    })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('User delete error')
+            }
+            return response.json()
+        })
+        .then(data => {
+            sign_out()
+        })
+}
+
+document.getElementById('delete-user-button').addEventListener('click', delete_user)
