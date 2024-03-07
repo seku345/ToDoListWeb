@@ -62,6 +62,84 @@ def get_list_of_tasks(name: str, username: str) -> list[Task] | None:
     return list_of_tasks
 
 
+def get_sorted_by_name_list_of_tasks(name: str, username: str, rule: int) -> list[Task] | None:
+    connection = sqlite3.connect(f'{name}.db')
+    cursor = connection.cursor()
+
+    # getting the user id
+    cursor.execute('SELECT user_id FROM users WHERE username = ?', (username,))
+    user_record = cursor.fetchone()
+
+    if user_record is None:
+        connection.close()
+        return None
+
+    user_id = user_record[0]
+
+    # getting the tasks of the required user
+    if rule == 1:
+        cursor.execute('SELECT * FROM tasks WHERE user_id = ? ORDER BY task_name ASC', (user_id,))
+    if rule == 2:
+        cursor.execute('SELECT * FROM tasks WHERE user_id = ? ORDER BY task_name DESC', (user_id,))
+    list_of_tasks = list(map(lambda x: Task(*x), cursor.fetchall()))
+
+    connection.close()
+
+    return list_of_tasks
+
+
+def get_sorted_by_date_list_of_tasks(name: str, username: str, rule: int) -> list[Task] | None:
+    connection = sqlite3.connect(f'{name}.db')
+    cursor = connection.cursor()
+
+    # getting the user id
+    cursor.execute('SELECT user_id FROM users WHERE username = ?', (username,))
+    user_record = cursor.fetchone()
+
+    if user_record is None:
+        connection.close()
+        return None
+
+    user_id = user_record[0]
+
+    # getting the tasks of the required user
+    if rule == 1:
+        cursor.execute('SELECT * FROM tasks WHERE user_id = ? ORDER BY task_date ASC, task_time ASC', (user_id,))
+    if rule == 2:
+        cursor.execute('SELECT * FROM tasks WHERE user_id = ? ORDER BY task_date DESC, task_time DESC', (user_id,))
+    list_of_tasks = list(map(lambda x: Task(*x), cursor.fetchall()))
+
+    connection.close()
+
+    return list_of_tasks
+
+
+def get_sorted_by_status_list_of_tasks(name: str, username: str, rule: int) -> list[Task] | None:
+    connection = sqlite3.connect(f'{name}.db')
+    cursor = connection.cursor()
+
+    # getting the user id
+    cursor.execute('SELECT user_id FROM users WHERE username = ?', (username,))
+    user_record = cursor.fetchone()
+
+    if user_record is None:
+        connection.close()
+        return None
+
+    user_id = user_record[0]
+
+    # getting the tasks of the required user
+    if rule == 1:
+        cursor.execute('SELECT * FROM tasks WHERE user_id = ? ORDER BY task_status ASC', (user_id,))
+    if rule == 2:
+        cursor.execute('SELECT * FROM tasks WHERE user_id = ? ORDER BY task_status DESC', (user_id,))
+    list_of_tasks = list(map(lambda x: Task(*x), cursor.fetchall()))
+
+    connection.close()
+
+    return list_of_tasks
+
+
 def get_task_by_id_from_db(name: str, username: str, task_id: int) -> Task | None:
     connection = sqlite3.connect(f'{name}.db')
     cursor = connection.cursor()

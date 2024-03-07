@@ -265,22 +265,7 @@ function get_user_tasks() {
             }
             return response.json()
         })
-        .then(data => {
-            const task_body = document.getElementById('tasks-body')
-            task_body.innerHTML = ''
-            data.forEach(task => {
-                const row = document.createElement('div')
-                row.classList.add('tasks-row')
-                row.onclick = () => get_task_info(task.id)
-                row.innerHTML = `
-                                 <div><p>${task.name}</p></div>
-                                 <div><p>${task.description}</p></div>
-                                 <div><p>${task.date}</p></div>
-                                 <div><p>${task.time}</p></div>
-                                 <div><p>${task.status}</p></div>`
-                task_body.appendChild(row)
-            })
-        })
+        .then(data => update_task_table(data))
         .catch(error => {
             console.error('Error:', error)
         })
@@ -641,3 +626,137 @@ function change_password() {
 }
 
 document.getElementById('change-password-submit').addEventListener('click', change_password)
+
+let name_sort = 0
+let date_sort = 0
+let status_sort = 0
+
+function change_name_sort_status() {
+    if (name_sort === 0) {
+        name_sort = 1
+    } else if (name_sort === 1) {
+        name_sort = 2
+    } else {
+        name_sort = 0
+    }
+}
+
+function change_date_sort_status() {
+    if (date_sort === 0) {
+        date_sort = 1
+    } else if (date_sort === 1) {
+        date_sort = 2
+    } else {
+        date_sort = 0
+    }
+}
+
+function change_status_sort_status() {
+    if (status_sort === 0) {
+        status_sort = 1
+    } else if (status_sort === 1) {
+        status_sort = 2
+    } else {
+        status_sort = 0
+    }
+}
+
+function is_no_sort() {
+    return (name_sort === 0) && (date_sort === 0) && (status_sort === 0)
+}
+
+function update_task_table(data) {
+    is_big_desc = true
+    show_task_description()
+    const task_body = document.getElementById('tasks-body')
+    task_body.innerHTML = ''
+    data.forEach(task => {
+        const row = document.createElement('div')
+        row.classList.add('tasks-row')
+        row.onclick = () => get_task_info(task.id)
+        row.innerHTML = `
+                         <div><p>${task.name}</p></div>
+                         <div><p>${task.description}</p></div>
+                         <div><p>${task.date}</p></div>
+                         <div><p>${task.time}</p></div>
+                         <div><p>${task.status}</p></div>`
+        task_body.appendChild(row)
+    })
+}
+
+function sort_by_name() {
+    change_name_sort_status()
+    date_sort = 0
+    status_sort = 0
+    if (is_no_sort()) {
+        get_user_tasks()
+        return
+    } else {
+        fetch(`http://127.0.0.1:5000/api/${current_user}/tasks/sort/name/${name_sort}`, {
+            method: 'GET'
+        })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Name sort error')
+                }
+                return response.json()
+            })
+            .then(data => update_task_table(data))
+            .catch(error => {
+                console.log('Error:', error)
+            })
+    }
+}
+
+function sort_by_date() {
+    change_date_sort_status()
+    name_sort = 0
+    status_sort = 0
+    if (is_no_sort()) {
+        get_user_tasks()
+        return
+    } else {
+        fetch(`http://127.0.0.1:5000/api/${current_user}/tasks/sort/date/${date_sort}`, {
+            method: 'GET'
+        })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('DateTime sort error')
+                }
+                return response.json()
+            })
+            .then(data => update_task_table(data))
+            .catch(error => {
+                console.log('Error:', error)
+            })
+    }
+}
+
+function sort_by_status() {
+    change_status_sort_status()
+    date_sort = 0
+    name_sort = 0
+    if (is_no_sort()) {
+        get_user_tasks()
+        return
+    } else {
+        fetch(`http://127.0.0.1:5000/api/${current_user}/tasks/sort/status/${status_sort}`, {
+            method: 'GET'
+        })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Status sort error')
+                }
+                return response.json()
+            })
+            .then(data => update_task_table(data))
+            .catch(error => {
+                console.log('Error:', error)
+            })
+    }
+}
+
+document.getElementById('name-sort').addEventListener('click', sort_by_name)
+document.getElementById('date-sort').addEventListener('click', sort_by_date)
+document.getElementById('time-sort').addEventListener('click', sort_by_date)
+document.getElementById('status-sort').addEventListener('click', sort_by_status)

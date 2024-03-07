@@ -50,6 +50,33 @@ def get_user_tasks(username: str):
     return jsonify(list_of_dicts)
 
 
+@app.route('/api/<string:username>/tasks/sort/name/<int:rule>', methods=['GET'])
+def sort_tasks_by_name(username: str, rule: int):
+    list_of_tasks = get_sorted_by_name_list_of_tasks(DB_NAME, username, rule)
+    if list_of_tasks is None:
+        raise NotFound
+    list_of_dicts = list(map(lambda x: x.to_dict(), list_of_tasks))
+    return jsonify(list_of_dicts)
+
+
+@app.route('/api/<string:username>/tasks/sort/date/<int:rule>', methods=['GET'])
+def sort_tasks_by_date(username: str, rule: int):
+    list_of_tasks = get_sorted_by_date_list_of_tasks(DB_NAME, username, rule)
+    if list_of_tasks is None:
+        raise NotFound
+    list_of_dicts = list(map(lambda x: x.to_dict(), list_of_tasks))
+    return jsonify(list_of_dicts)
+
+
+@app.route('/api/<string:username>/tasks/sort/status/<int:rule>', methods=['GET'])
+def sort_tasks_by_status(username: str, rule: int):
+    list_of_tasks = get_sorted_by_status_list_of_tasks(DB_NAME, username, rule)
+    if list_of_tasks is None:
+        raise NotFound
+    list_of_dicts = list(map(lambda x: x.to_dict(), list_of_tasks))
+    return jsonify(list_of_dicts)
+
+
 @app.route('/api/<string:username>/tasks/<int:task_id>', methods=['GET'])
 def get_task_by_id(username: str, task_id: int):
     task_data = get_task_by_id_from_db(DB_NAME, username, task_id)
