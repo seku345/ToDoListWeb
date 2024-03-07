@@ -103,9 +103,10 @@ def add_task(username: str):
 
 @app.route('/api/<string:username>', methods=['PUT'])
 def edit_user_info(username: str):
-    new_username = request.form['new_username']
-    new_email = request.form['new_email']
-    new_password = request.form['new_password']
+    data = request.get_json()
+    new_username = data.get('new_username')
+    new_email = data.get('new_email')
+    new_password = data.get('new_password')
     if edit_user_info_in_db(DB_NAME, username, new_username, new_email, new_password):
         raise NotFound
     return jsonify({'message': 'User info edited successfully!'})
@@ -133,21 +134,21 @@ def switch_task_status(username: str, task_id: int):
 @app.route('/api/<string:username>', methods=['DELETE'])
 def delete_user(username: str):
     if delete_user_from_db(DB_NAME, username):
-        raise NotFound()
+        raise NotFound
     return jsonify({'message': 'User deleted successfully!'})
 
 
 @app.route('/api/<string:username>/tasks/<int:task_id>', methods=['DELETE'])
 def delete_task(username: str, task_id: int):
     if delete_task_from_db(DB_NAME, username, task_id):
-        raise NotFound()
+        raise NotFound
     return jsonify({'message': 'Task deleted successfully!'})
 
 
 @app.route('/api/<string:username>/tasks', methods=['DELETE'])
 def delete_user_tasks(username: str):
     if delete_user_tasks_from_db(DB_NAME, username):
-        raise NotFound()
+        raise NotFound
     return jsonify({'message': 'User tasks deleted successfully!'})
 
 

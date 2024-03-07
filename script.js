@@ -13,8 +13,10 @@ task_description = document.getElementById('task-info-description')
 task_date = document.getElementById('task-info-date')
 task_time = document.getElementById('task-info-time')
 editing_task_container = document.getElementById('editing-task-form-container')
+change_password_container = document.getElementById('change-password-container')
 
 let current_user = null
+let current_email = null
 let current_task = null
 let current_status = null
 let task = {
@@ -220,18 +222,21 @@ function get_user_info() {
             document.getElementById('username_place').innerText = data.username
             document.getElementById('password_place').innerText = data.password
             document.getElementById('email_place').innerText = data.email
+            current_email = data.email
         })
         .catch(error => {
-            console.error('Error:',error)
+            console.error('Error:', error)
         })
 
     show_all_children(user_info)
     hide_all_children(header_buttons)
+    hide_all_children(change_password_container)
     show_all_children(sign_out_block)
 }
 
 function sign_out() {
     current_user = null
+    current_email = null
     current_task = null
     current_status = null
     task = {
@@ -332,6 +337,7 @@ function get_task_info(task_id) {
 function  to_adding_task() {
     hide_all_children(tasks_container)
     hide_all_children(task_info)
+    hide_all_children(change_password_container)
     show_all_children(adding_task_container)
 }
 
@@ -578,6 +584,60 @@ function delete_user() {
         .then(data => {
             sign_out()
         })
+        .catch(error => {
+            console.error('Error:', error)
+        })
 }
 
 document.getElementById('delete-user-button').addEventListener('click', delete_user)
+
+let is_changing_password = false
+
+function changing_password() {
+    document.getElementById('password-input').value = ''
+    if (!is_changing_password) {
+        is_changing_password = true
+        show_all_children(change_password_container)
+    } else {
+        is_changing_password = false
+        hide_all_children(change_password_container)
+    }
+}
+
+document.getElementById('change-password-button').addEventListener('click', changing_password)
+
+function change_password() {
+    const new_password = document.getElementById('password-input').value
+    if (new_password.trim() === '') {
+        display_error_message('!', 'error-message-add')
+        return
+    }
+    const user_data = {
+        new_username: current_user,
+        new_email: current_email,
+        new_password: new_password
+    }
+    fetch(`http://127.0.0.1:5000/api/${current_user}`, {
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(user_data)
+    })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Changing password error')
+            }
+            return response.json()
+        })
+        .then(data => {
+            is_changing_password = false
+            hide_all_children(change_password_container)
+            get_user_info()
+        })
+        .catch(error => {
+            console.error('Error:', error)
+        })
+}
+
+document.getElementById('change-password-submit').addEventListener('click', change_password)
