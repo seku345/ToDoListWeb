@@ -371,6 +371,7 @@ function add_task(event) {
             })
             .then(data => {
                 back_to_task_list(event)
+                check_deadlines()
             })
             .catch(error => {
                 console.error("Error:", error)
@@ -674,6 +675,7 @@ function update_task_table(data) {
         const row = document.createElement('div')
         row.classList.add('tasks-row')
         row.onclick = () => get_task_info(task.id)
+        row.id = task.id
         row.innerHTML = `
                          <div><p>${task.name}</p></div>
                          <div><p>${task.description}</p></div>
@@ -682,6 +684,7 @@ function update_task_table(data) {
                          <div><p>${task.status}</p></div>`
         task_body.appendChild(row)
     })
+    check_deadlines()
 }
 
 function sort_by_name() {
@@ -787,3 +790,52 @@ function download_csv() {
 }
 
 document.getElementById('export-button').addEventListener('click', download_csv)
+
+function check_deadlines() {
+    if (current_user == null) {
+        return
+    }
+    fetch(`http://127.0.0.1:5000/api/${current_user}/tasks`, {
+        method: 'GET'
+    })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Checking deadlines error')
+            }
+            return response.json()
+        })
+        .then(data => {
+            data.forEach(task => {
+                const task_datetime = new Date(`${task.date}T${task.time}`)
+                const current_datetime = new Date()
+                if (current_datetime > task_datetime) {
+                    document.getElementById(task.id).querySelectorAll('p').forEach(text => {
+                        fetch(`http://127.0.0.1:5000/api/${current_user}/tasks/${task.id}/status`, {
+                            method: 'GET'
+                        })
+                            .then(response => {
+                                if (!response.ok) {
+                                    throw new Error('Get task status error')
+                                }
+                                return response.json()
+                            })
+                            .then(data => {
+                                if (!data.result) {
+                                    text.style.color = '#f25252'
+                                }
+                            })
+                    })
+                }
+            })
+        })
+        .catch(error => {
+            console.error('Error:', error)
+        })
+}
+
+const now = new Date()
+const delay  = (60 - now.getSeconds()) * 1000 + 1000
+setTimeout(() => {
+    check_deadlines()
+    setInterval(check_deadlines, 60000)
+}, delay)
