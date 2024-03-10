@@ -343,7 +343,12 @@ function add_task(event) {
     const title = form.querySelector('input[name="task_name"]').value
     const description = form.querySelector('textarea[name="task_description"]').value
     const time = form.querySelector('input[name="task_time"]').value
-    const date = form.querySelector('input[name="task_date"]').value
+    let date = form.querySelector('input[name="task_date"]').value
+
+    if ((date === '') && (time !== '')) {
+        const now = new Date()
+        date = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`
+    }
 
     if (title.trim() === '') {
         display_error_message('Missing Task Title!', 'error-message-add')
@@ -791,6 +796,51 @@ function download_csv() {
 
 document.getElementById('export-button').addEventListener('click', download_csv)
 
+function check_task_deadline(task_id) {
+    if (current_user == null) {
+        return
+    }
+    fetch(`http://127.0.0.1:5000/api/${current_user}/tasks/${task_id}`, {
+        method: 'GET'
+    })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Checking deadline error')
+            }
+            return response.json()
+        })
+        .then(task => {
+            if ((task.date === '') && (task.time === '')) {
+                return
+            } else if ((task.time === '') && (task.date !== '')) {
+                task.time = '23:59'
+            }
+            const task_datetime = new Date(`${task.date}T${task.time}`)
+            const current_datetime = new Date()
+            if (current_datetime > task_datetime) {
+                fetch(`http://127.0.0.1:5000/api/${current_user}/tasks/${task.id}/status`, {
+                    method: 'GET'
+                })
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('Get task status error')
+                        }
+                        return response.json()
+                    })
+                    .then(data => {
+                        if (!data.result) {
+                            document.getElementById(task.id).querySelectorAll('p').forEach(text => {
+                                text.style.color = '#f25252'
+                            })
+                        }
+                    })
+            }
+        })
+        .catch(error => {
+            console.error(error)
+        })
+}
+
 function check_deadlines() {
     if (current_user == null) {
         return
@@ -806,26 +856,7 @@ function check_deadlines() {
         })
         .then(data => {
             data.forEach(task => {
-                const task_datetime = new Date(`${task.date}T${task.time}`)
-                const current_datetime = new Date()
-                if (current_datetime > task_datetime) {
-                    document.getElementById(task.id).querySelectorAll('p').forEach(text => {
-                        fetch(`http://127.0.0.1:5000/api/${current_user}/tasks/${task.id}/status`, {
-                            method: 'GET'
-                        })
-                            .then(response => {
-                                if (!response.ok) {
-                                    throw new Error('Get task status error')
-                                }
-                                return response.json()
-                            })
-                            .then(data => {
-                                if (!data.result) {
-                                    text.style.color = '#f25252'
-                                }
-                            })
-                    })
-                }
+                check_task_deadline(task.id)
             })
         })
         .catch(error => {
