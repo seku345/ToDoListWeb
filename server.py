@@ -1,4 +1,6 @@
-from flask import Flask, jsonify, request
+import csv
+
+from flask import Flask, jsonify, request, send_file
 from flask_cors import CORS
 from werkzeug.exceptions import NotFound, Conflict
 
@@ -93,6 +95,22 @@ def get_task_status(username: str, task_id: int):
     return jsonify({'result': task_status})
 
 
+@app.route('/api/<string:username>/tasks/download', methods=['GET'])
+def get_tasks_csv(username: str):
+    user_tasks = get_list_of_tasks(DB_NAME, username)
+    list_of_dicts = list(map(lambda x: x.to_dict(), user_tasks))
+    for task in list_of_dicts:
+        del task['id']
+    keys = list_of_dicts[0].keys()
+
+    with open(f'outputs/{username}_data.csv', 'w', encoding='utf-8', newline='') as file:
+        dict_writer = csv.DictWriter(file, keys)
+        dict_writer.writeheader()
+        dict_writer.writerows(list_of_dicts)
+
+    return send_file(f'outputs/{username}_data.csv', as_attachment=True)
+
+
 @app.route('/api/login', methods=['POST'])
 def login():
     data = request.get_json()
@@ -160,6 +178,7 @@ def switch_task_status(username: str, task_id: int):
 
 @app.route('/api/<string:username>', methods=['DELETE'])
 def delete_user(username: str):
+    delete_file(f'outputs/{username}_data.csv')
     if delete_user_from_db(DB_NAME, username):
         raise NotFound
     return jsonify({'message': 'User deleted successfully!'})
@@ -167,6 +186,7 @@ def delete_user(username: str):
 
 @app.route('/api/<string:username>/tasks/<int:task_id>', methods=['DELETE'])
 def delete_task(username: str, task_id: int):
+    delete_file(f'outputs/{username}_data.csv')
     if delete_task_from_db(DB_NAME, username, task_id):
         raise NotFound
     return jsonify({'message': 'Task deleted successfully!'})
@@ -174,6 +194,7 @@ def delete_task(username: str, task_id: int):
 
 @app.route('/api/<string:username>/tasks', methods=['DELETE'])
 def delete_user_tasks(username: str):
+    delete_file(f'outputs/{username}_data.csv')
     if delete_user_tasks_from_db(DB_NAME, username):
         raise NotFound
     return jsonify({'message': 'User tasks deleted successfully!'})
@@ -181,6 +202,7 @@ def delete_user_tasks(username: str):
 
 @app.route('/api/delete', methods=['DELETE'])
 def delete_all_data():
+    clear_folder('outputs')
     clear_db(DB_NAME)
     return jsonify({'message': 'Data deleted successfully!'})
 
