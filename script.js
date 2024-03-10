@@ -760,3 +760,30 @@ document.getElementById('name-sort').addEventListener('click', sort_by_name)
 document.getElementById('date-sort').addEventListener('click', sort_by_date)
 document.getElementById('time-sort').addEventListener('click', sort_by_date)
 document.getElementById('status-sort').addEventListener('click', sort_by_status)
+
+function download_csv() {
+    fetch(`http://127.0.0.1:5000/api/${current_user}/tasks/download`, {
+        method: 'GET'
+    })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Downloading file error')
+            }
+            return response.blob()
+        })
+        .then(blob => {
+            const url = window.URL.createObjectURL(blob)
+
+            const link = document.createElement('a')
+            link.href = url
+            link.download = `${current_user}_tasks.csv`
+            link.click()
+
+            URL.revokeObjectURL(url)
+        })
+        .catch(error => {
+            console.error('Error:', error)
+        })
+}
+
+document.getElementById('export-button').addEventListener('click', download_csv)

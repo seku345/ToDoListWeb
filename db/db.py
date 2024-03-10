@@ -1,3 +1,6 @@
+import  os
+from pathlib import Path
+from shutil import rmtree
 import sqlite3
 
 
@@ -56,3 +59,20 @@ def is_unique_user(name: str, username: str) -> bool:
         return True
     else:
         return False
+
+
+def delete_file(path) -> None:
+    try:
+        os.remove(path)
+    except FileNotFoundError:
+        pass
+    except Exception as error:
+        print("Deleting file error:", error)
+
+
+def clear_folder(folder_path) -> None:
+    for path in Path(folder_path).glob('*'):
+        if path.is_dir():
+            rmtree(path)
+        else:
+            path.unlink()
