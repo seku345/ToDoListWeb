@@ -462,12 +462,15 @@
     cursor: default;
 }
 .tasks-table-head div {
+    display: flex;
+    flex-direction: row;
     width: 20%;
     font-size: 24px;
     color: #FFFFFF;
     text-align: left;
-    padding-left: 2px;
+    padding-left: 10px;
     font-weight: 400;
+    user-select: none;
 }
 .tasks-table-head {
     display: flex;
@@ -502,10 +505,16 @@
 .tasks-row div {
     width: 19%;
     font-size: 18px;
-    text-align: left;
+    text-align: center;
     padding-left: 10px;
     color: #057DCD;
     overflow: hidden;
+}
+.tasks-row div:first-child {
+    text-align: left;
+}
+.tasks-row div:nth-child(2) {
+    text-align: left;
 }
 .tasks-row div>p {
     overflow: hidden;
@@ -823,4 +832,14 @@
     height: 30px;
     margin: 0;
     padding: 0;
+}
+.sort-arrow-container {
+    position: fixed;
+    width: 20px;
+    height: 20px;
+}
+.sort-arrow-container img {
+    transform: translate(-10px, 10px);
+    width: 20px;
+    height: 20px;
 }

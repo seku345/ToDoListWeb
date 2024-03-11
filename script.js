@@ -14,6 +14,9 @@ task_date = document.getElementById('task-info-date')
 task_time = document.getElementById('task-info-time')
 editing_task_container = document.getElementById('editing-task-form-container')
 change_password_container = document.getElementById('change-password-container')
+name_sort_arrow = document.getElementById('name-sort-arrow')
+datetime_sort_arrow = document.getElementById('datetime-sort-arrow')
+status_sort_arrow = document.getElementById('status-sort-arrow')
 
 let current_user = null
 let current_email = null
@@ -270,6 +273,9 @@ function get_user_tasks() {
             console.error('Error:', error)
         })
     show_all_children(tasks_container)
+    hide_all_children(name_sort_arrow)
+    hide_all_children(datetime_sort_arrow)
+    hide_all_children(status_sort_arrow)
 }
 
 function get_task_info(task_id) {
@@ -640,30 +646,57 @@ let status_sort = 0
 function change_name_sort_status() {
     if (name_sort === 0) {
         name_sort = 1
+        name_sort_arrow.querySelector('img').src = 'sources/arrow_down.png'
+        hide_all_children(datetime_sort_arrow)
+        hide_all_children(status_sort_arrow)
+        show_all_children(name_sort_arrow)
     } else if (name_sort === 1) {
         name_sort = 2
+        hide_all_children(datetime_sort_arrow)
+        hide_all_children(status_sort_arrow)
+        name_sort_arrow.querySelector('img').src = 'sources/arrow_up.png'
     } else {
         name_sort = 0
+        hide_all_children(name_sort_arrow)
+        name_sort_arrow.querySelector('img').src = 'sources/arrow_down.png'
     }
 }
 
 function change_date_sort_status() {
     if (date_sort === 0) {
         date_sort = 1
+        datetime_sort_arrow.querySelector('img').src = 'sources/arrow_down.png'
+        hide_all_children(name_sort_arrow)
+        hide_all_children(status_sort_arrow)
+        show_all_children(datetime_sort_arrow)
     } else if (date_sort === 1) {
         date_sort = 2
+        hide_all_children(name_sort_arrow)
+        hide_all_children(status_sort_arrow)
+        datetime_sort_arrow.querySelector('img').src = 'sources/arrow_up.png'
     } else {
         date_sort = 0
+        hide_all_children(datetime_sort_arrow)
+        datetime_sort_arrow.querySelector('img').src = 'sources/arrow_down.png'
     }
 }
 
 function change_status_sort_status() {
     if (status_sort === 0) {
         status_sort = 1
+        status_sort_arrow.querySelector('img').src = 'sources/arrow_down.png'
+        hide_all_children(name_sort_arrow)
+        hide_all_children(datetime_sort_arrow)
+        show_all_children(status_sort_arrow)
     } else if (status_sort === 1) {
         status_sort = 2
+        hide_all_children(name_sort_arrow)
+        hide_all_children(datetime_sort_arrow)
+        status_sort_arrow.querySelector('img').src = 'sources/arrow_up.png'
     } else {
         status_sort = 0
+        hide_all_children(status_sort_arrow)
+        status_sort_arrow.querySelector('img').src = 'sources/arrow_down.png'
     }
 }
 
