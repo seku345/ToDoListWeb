@@ -26,7 +26,7 @@ def add_user_to_db(name: str, username: str, email: str, password: str) -> None:
 
 
 def add_task_to_db(name: str, username: str, task_name: str,
-                   task_description: str, task_date: str, task_time: str) -> bool:
+                   task_description: str, task_date: str, task_time: str, task_status: int, task_id: list[int]) -> bool:
     connection = sqlite3.connect(f'{name}.db')
     cursor = connection.cursor()
 
@@ -40,10 +40,17 @@ def add_task_to_db(name: str, username: str, task_name: str,
 
     user_id = user_record[0]
 
+    if task_status == 1:
+        status = '✔'
+    else:
+        status = '✘'
+
     cursor.execute('''INSERT INTO tasks
-                    (user_id, task_name, task_description, task_date, task_time)
-                    VALUES (?, ?, ?, ?, ?)''',
-                   (user_id, task_name, task_description, task_date, task_time))
+                    (user_id, task_name, task_description, task_date, task_time, task_status)
+                    VALUES (?, ?, ?, ?, ?, ?)''',
+                   (user_id, task_name, task_description, task_date, task_time, status))
+
+    task_id[0] = cursor.lastrowid
 
     connection.commit()
     connection.close()

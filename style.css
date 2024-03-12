@@ -559,7 +559,18 @@
     border-radius: 0 0 20px 0;
     border-left: 1px solid #FFFFFF;
 }
-.task-button:not(:first-child):hover {
+.undo-inactive {
+    background-color: #4e738d;
+}
+.undo-active {
+    background-color: #0f7dc9;
+    transition: background-color 0.2s ease;
+}
+.undo-active:hover {
+    background-color: #3d84b6;
+    transition: background-color 0.2s ease-in-out;
+}
+.task-button:nth-child(2):hover {
     background-color: #3d84b6;
     transition: background-color 0.2s ease-in-out;
 }

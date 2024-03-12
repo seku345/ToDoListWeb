@@ -17,6 +17,7 @@ change_password_container = document.getElementById('change-password-container')
 name_sort_arrow = document.getElementById('name-sort-arrow')
 datetime_sort_arrow = document.getElementById('datetime-sort-arrow')
 status_sort_arrow = document.getElementById('status-sort-arrow')
+undo_button = document.getElementById('undo-button')
 
 let current_user = null
 let current_email = null
@@ -243,17 +244,18 @@ function sign_out() {
     current_task = null
     current_status = null
     task = {
-    task_name: null,
-    task_description: null,
-    task_date: null,
-    task_time: null
-}
+        task_name: null,
+        task_description: null,
+        task_date: null,
+        task_time: null
+    }
     hide_all_children(main_window)
     hide_all_children(sign_out_block)
     show_all_children(header_buttons)
     hide_all_children(user_info)
     show_all_children(main_text)
     hide_all_children(tasks_container)
+    change_last_action(0)
 }
 
 function get_user_tasks() {
@@ -364,7 +366,8 @@ function add_task(event) {
             task_name: title,
             task_description: description,
             task_time: time,
-            task_date: date
+            task_date: date,
+            task_status: '✘'
         }
 
         fetch(`http://127.0.0.1:5000/api/${current_user}/tasks`, {
@@ -383,6 +386,8 @@ function add_task(event) {
             .then(data => {
                 back_to_task_list(event)
                 check_deadlines()
+                change_last_action(1)
+                last_task_id = data.id
             })
             .catch(error => {
                 console.error("Error:", error)
@@ -437,6 +442,7 @@ function change_task_status(event) {
 document.getElementById('status-button-radio-label').addEventListener('click', change_task_status)
 
 function delete_task() {
+    save_task(current_task)
     fetch(`http://127.0.0.1:5000/api/${current_user}/tasks/${current_task}`, {
         method: 'DELETE',
     })
@@ -452,6 +458,7 @@ function delete_task() {
             hide_all_children(editing_task_container)
             is_editing_task = false
             current_task = null
+            change_last_action(3)
         })
         .catch(error => {
             console.error('Error:', error)
@@ -520,6 +527,9 @@ document.getElementById('back-button-edit').addEventListener('click', back_to_ta
 function edit_task(event) {
     event.preventDefault()
 
+    last_task_id = current_task
+    save_task(current_task)
+
     const title = document.getElementById('task_name_e').value
     const description = document.getElementById('task_description_e').value
     const time = document.getElementById('task_time_e').value
@@ -559,6 +569,7 @@ function edit_task(event) {
                 const temp = current_task;
                 current_task = null
                 get_task_info(temp)
+                change_last_action(2)
             })
             .catch(error => {
                 console.error("Error:", error)
@@ -903,3 +914,158 @@ setTimeout(() => {
     check_deadlines()
     setInterval(check_deadlines, 60000)
 }, delay)
+
+function save_task(id) {
+    if (id === null) {
+        return
+    }
+    fetch(`http://127.0.0.1:5000/api/${current_user}/tasks/${id}`, {
+        method: 'GET'
+    })
+        .then(response => {
+        if (!response.ok) {
+            throw new Error('Save task error')
+        }
+        return response.json()
+    })
+        .then(data => {
+            last_task = {
+                task_name: data.name,
+                task_description: data.description,
+                task_date: data.date,
+                task_time: data.time,
+                task_status: data.status
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error)
+        })
+}
+
+/*
+    0 - nothing
+    1 - add
+    2 - edit
+    3 - delete
+ */
+let last_action = 0
+let last_task_id = null
+let last_task = {
+    task_name: null,
+    task_description: null,
+    task_date: null,
+    task_time: null,
+    task_status: null
+}
+
+function change_last_action(key) {
+    last_action = key
+    if (last_action === 0) {
+        undo_button.classList.remove('undo-active')
+        undo_button.classList.add('undo-inactive')
+        last_task_id = null
+        last_task = {
+            name: null,
+            description: null,
+            date: null,
+            time: null,
+            status: null
+    }
+    } else {
+        undo_button.classList.remove('undo-inactive')
+        undo_button.classList.add('undo-active')
+    }
+}
+
+function undo_add() {
+    if (last_task_id === null) {
+        return
+    }
+    fetch(`http://127.0.0.1:5000/api/${current_user}/tasks/${last_task_id}`, {
+        method: 'DELETE'
+    })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Undo adding error')
+            }
+            return response.json()
+        })
+        .then(data => {
+            if (last_task_id === current_task) {
+                hide_all_children(task_info)
+            }
+            current_task = null
+            get_user_tasks()
+            change_last_action(0)
+        })
+        .catch(error => {
+            console.error('Error:', error)
+        })
+}
+
+function undo_edit(event) {
+    fetch(`http://127.0.0.1:5000/api/${current_user}/tasks/${last_task_id}`, {
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(last_task)
+    })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Undo editing error')
+            }
+            return response.json()
+        })
+        .then(data => {
+            if ((current_task === last_task_id) && (current_task !== null)) {
+                const temp = current_task
+                current_task = null
+                get_task_info(last_task_id)
+            }
+            back_to_task_list(event)
+            change_last_action(0)
+        })
+        .catch(error => {
+            console.error('Error:', error)
+        })
+}
+
+function undo_delete() {
+    fetch(`http://127.0.0.1:5000/api/${current_user}/tasks`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(last_task)
+    })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Undo deleting error')
+            }
+            return response.json()
+        })
+        .then(data => {
+            get_user_tasks()
+            check_deadlines()
+            get_user_tasks()
+            change_last_action(0)
+        })
+        .catch(error => {
+            console.error('Error:', error)
+        })
+}
+
+function undo_action(event) {
+    if (last_action === 0) {
+        return
+    } else if (last_action === 1) {
+        undo_add()
+    } else if (last_action === 2) {
+        undo_edit(event)
+    } else if (last_action === 3) {
+        undo_delete()
+    }
+}
+
+undo_button.addEventListener('click', undo_action)

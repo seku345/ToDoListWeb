@@ -141,9 +141,12 @@ def add_task(username: str):
     task_description = data.get('task_description')
     task_time = data.get('task_time')
     task_date = data.get('task_date')
-    if add_task_to_db(DB_NAME, username, task_name, task_description, task_date, task_time):
+    task_status = data.get('task-status')
+    task_id = [0]
+    if add_task_to_db(DB_NAME, username, task_name, task_description, task_date, task_time, task_status, task_id):
         raise NotFound
-    return jsonify({'message': 'Task added successfully!'})
+    return jsonify({'message': 'Task added successfully!',
+                    'id': task_id[0]})
 
 
 @app.route('/api/<string:username>', methods=['PUT'])
